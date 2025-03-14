@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
-    "@tailwindcss/typography": "^0.5.16",
+    "@tailwindcss/typography": "^0.0.0-insiders.0339c42",
     "next": "15.2.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
