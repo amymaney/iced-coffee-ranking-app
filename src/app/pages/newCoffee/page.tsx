@@ -1,11 +1,25 @@
 "use client";
 import { useState, useEffect } from "react";
-import StarRating from "../components/StarRater";
+import StarRating from "../../components/StarRater";
 import { SquareArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useSession, signOut } from "next-auth/react";
+import { LogOut } from "lucide-react";
 
 export default function NewIcedCoffee(){
   const router = useRouter();
+    const { data: session, status } = useSession();
+    
+    // If status is "loading", show a loading state
+    if (status === "loading") {
+      return <p>Loading...</p>;
+    }
+    
+    useEffect(() => {
+      if (!session) {
+        router.push("/"); // Redirect to home after signing in
+      }
+    }, [session, router]);
 
     const [coffee, setCoffee] = useState({
         name:"",
@@ -48,14 +62,24 @@ export default function NewIcedCoffee(){
 
     return(
       <div className="min-h-screen bg-[#a98467] relative flex flex-col">
-        <div className="absolute top-6 left-6 z-10">
-          <SquareArrowLeft 
-            onClick={() => router.push("/")}
-            className="cursor-pointer w-8 h-8 text-[#f0ead2]" 
-          />
-        </div>
+        <div className="flex justify-between items-center mt-4 ml-8 mr-10">
+          <div className="text-lg font-bold pr-4 pt-0.25 text-[#f0ead2]">
+            <SquareArrowLeft 
+              onClick={() => router.push("/")}
+              className="cursor-pointer w-8 h-8 text-[#f0ead2] mt-2" 
+            />
+          </div>
 
-        <div className="w-full max-w-lg mx-auto p-10 bg-[#f0ead2] shadow-md mt-30 rounded-lg">
+          <div
+            className="flex flex-row text-[#f0ead2] cursor-pointer w"
+            onClick={() => signOut()} // Log out the user
+          >
+            <h2 className="text-lg font-bold pr-4 pt-0.25">sign out</h2>
+            <LogOut className="w-8 h-8" />
+          </div>
+        </div>
+      
+        <div className="w-full max-w-lg mx-auto p-10 bg-[#f0ead2] shadow-md mt-10 rounded-xl">
           <h1 className="text-2xl font-bold mb-4 text-center text-[#432818]">new iced coffee</h1>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
@@ -63,7 +87,7 @@ export default function NewIcedCoffee(){
               <input
                 type="text"
                 name="name"
-                className="w-full p-2 rounded-lg bg-white placeholder:text-sm"
+                className="w-full p-2 rounded-xl bg-white placeholder:text-sm"
                 placeholder="iced pistachio latte"
                 value={coffee.name}
                 onChange={handleChange}
@@ -75,7 +99,7 @@ export default function NewIcedCoffee(){
               <input
                 type="text"
                 name="shop"
-                className="w-full p-2 bg-white rounded-lg placeholder:text-sm"
+                className="w-full p-2 bg-white rounded-xl placeholder:text-sm"
                 placeholder="the big bean"
                 value={coffee.shop}
                 onChange={handleChange}
@@ -87,7 +111,7 @@ export default function NewIcedCoffee(){
               <input
                 type="text"
                 name="price"
-                className="w-full p-2 bg-white rounded-lg placeholder:text-sm"
+                className="w-full p-2 bg-white rounded-xl placeholder:text-sm"
                 placeholder="4.99"
                 value={coffee.price}
                 onChange={handleChange}
@@ -107,13 +131,13 @@ export default function NewIcedCoffee(){
               <label className="block text-md font-medium font-semibold text-[#432818] mb-2">review</label>
               <textarea
                 name="review"
-                className="w-full p-2 bg-white rounded-lg placeholder:text-sm"
+                className="w-full p-2 bg-white rounded-xl placeholder:text-sm"
                 placeholder="your thoughts on this iced coffee..."
                 value={coffee.description}
                 onChange={handleChange}
               />
             </div>
-            <button type="submit" className="bg-[#adc178] text-[#432818] px-4 py-2 font-semibold rounded w-full">
+            <button type="submit" className="bg-[#adc178] text-[#432818] px-4 py-2 font-semibold rounded-xl w-full cursor-pointer">
               submit
             </button>
           </form>

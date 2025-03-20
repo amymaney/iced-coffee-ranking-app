@@ -26,13 +26,6 @@ const IcedCoffeeCard: React.FC<IcedCoffeeCardProps> = ({
         <h3 className="text-lg font-bold text-[#dbb42c] text-right">{rating}</h3>
       </div>
       <p className="text-sm text-[#a98467]">{description}</p>
-
-      {/* <p className="text-md text-gray-700">{formattedPrice}</p> 
-      <p className="text-sm text-gray-500 mb-2">{description}</p>
-      <p className="text-yellow-500">Rating: {rating}⭐</p>
-      {image!==""&&(
-        <img src={image} alt={name} className="w-full h-40 object-cover rounded-md mb-4" />
-      )} */}
     </div>
   );
 };
