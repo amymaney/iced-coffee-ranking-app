@@ -2,8 +2,10 @@
 import { useState, useEffect } from "react";
 import StarRating from "../components/StarRater";
 import { SquareArrowLeft } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function NewIcedCoffee(){
+  const router = useRouter();
 
     const [coffee, setCoffee] = useState({
         name:"",
@@ -13,10 +15,6 @@ export default function NewIcedCoffee(){
         description:"",
         image:""
     });
-
-    const handleBack = () => {
-      window.location.href="/" // Navigate to the homepage
-    };
 
     const handleChange = (e:React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => {
         const {name, value} = e.target;
@@ -52,7 +50,7 @@ export default function NewIcedCoffee(){
       <div className="min-h-screen bg-[#a98467] relative flex flex-col">
         <div className="absolute top-6 left-6 z-10">
           <SquareArrowLeft 
-            onClick={handleBack}
+            onClick={() => router.push("/")}
             className="cursor-pointer w-8 h-8 text-[#f0ead2]" 
           />
         </div>

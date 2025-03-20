@@ -21,7 +21,7 @@ export const coffeeShops: CoffeeShop[] = [
     {
         id: 1,
         name: "Coffee Shop A",
-        rating: 4.7, 
+        rating: 4.77, 
         location: "Walthamstow",
         image: "",
         icedCoffees:[
@@ -41,12 +41,20 @@ export const coffeeShops: CoffeeShop[] = [
                 description: "Delicious and not too sweet",
                 image: ""
             },
+            {
+                id: 3,
+                name: "Iced Caramel Frappe Latte",
+                price: 4.15,
+                rating: 4.9,
+                description: "Nice and creamy",
+                image: ""
+            },
         ]
     },
     {
         id: 2,
         name: "Coffee Shop B",
-        rating: 3.8, 
+        rating: 3.80, 
         location: "Brixton",
         image: "",
         icedCoffees:[
@@ -63,7 +71,7 @@ export const coffeeShops: CoffeeShop[] = [
     {
         id: 3,
         name: "Coffee Shop C",
-        rating: 4.9, 
+        rating: 4.88, 
         location: "Bermondsey",
         image: "",
         icedCoffees:[
@@ -71,7 +79,7 @@ export const coffeeShops: CoffeeShop[] = [
                 id: 1,
                 name: "Iced Caramel Latte",
                 price: 3.95,
-                rating: 4.85,
+                rating: 4.8,
                 description: "Sweet and creamy with a rich espresso base",
                 image: ""
             },
