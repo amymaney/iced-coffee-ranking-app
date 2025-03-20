@@ -1,11 +1,11 @@
-import NextAuth from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { JWT } from "next-auth/jwt"; // Importing the JWT type from NextAuth
-import { User } from "next-auth";  // Importing the User type from NextAuth
-import { SessionStrategy } from "next-auth";  // Importing SessionStrategy
-import { authenticateUser } from "@/lib/auth"; // ✅ Only import, don't redefine
+import { JWT } from "next-auth/jwt"; 
+import { User } from "next-auth";  
+import { SessionStrategy } from "next-auth";  
+import { authenticateUser } from "@/lib/auth"; 
 
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -15,28 +15,31 @@ export const authOptions = {
       },
       async authorize(credentials) {
         const { email, password } = credentials || {};
+        
         if (!email || !password) {
           return null;
         }
 
         const user = await authenticateUser(email, password);
+        console.log('User:', user); 
 
         if (user) {
           return {
-            id: String(user.id), // Ensure the `id` is a string
+            id: user.id,
             email: user.email,
           };
         } else {
+          console.log('Invalid credentials');
           return null;
         }
       },
     }),
   ],
   pages: {
-    signIn: "/auth/signin", // Custom sign-in page path
+    signIn: "/auth/signin", 
   },
   session: {
-    strategy: "jwt" as SessionStrategy, // Ensuring the strategy is typed correctly
+    strategy: "jwt" as SessionStrategy, 
   },
   callbacks: {
     async jwt({ token, user }: { token: JWT; user?: User }) {
@@ -52,6 +55,7 @@ export const authOptions = {
       return session;
     },
   },
+  debug: true, 
 };
 
 const handler = NextAuth(authOptions);
