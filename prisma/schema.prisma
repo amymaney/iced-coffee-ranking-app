@@ -15,13 +15,14 @@ generator client {
 
 
 model users {
-  id            Int              @id @default(autoincrement())
-  email         String           @unique
+  id            Int           @id @default(autoincrement())
+  email         String         @unique
   password      String
 }
 
 model CoffeeShop {
-  id            Int           @id @default(autoincrement())
+  id            Int           @id @default(autoincrement()) // Primary key
+  coffeeShopId  String        @unique
   name          String
   location      String
   rating        Float
@@ -36,6 +37,6 @@ model IcedCoffee {
   rating        Float
   description   String
   image         String
-  coffeeShop    CoffeeShop    @relation(fields: [coffeeShopId], references: [id])
-  coffeeShopId  Int //Foreign key to CoffeeShop
+  coffeeShopId  String
+  coffeeShop    CoffeeShop    @relation(fields: [coffeeShopId], references: [coffeeShopId])
 }

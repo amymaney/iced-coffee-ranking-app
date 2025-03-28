@@ -5,18 +5,17 @@ import { SquareArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import { LogOut } from "lucide-react";
-import { PrismaClient } from "@prisma/client/extension";
 import Head from "next/head";
-
-// const prisma = new PrismaClient();
 
 interface CoffeeData {
   name: string;
-  price: string;
+  price: number;
   rating: number;
-  shop: string;
+  coffeeShopId: string;
   description: string;
   image: string;
+  location: string;
+  coffeeShopName: string;
 }
 
 declare global {
@@ -36,20 +35,24 @@ export default function NewIcedCoffee(){
     }, [session, router]);
 
     const [coffee, setCoffee] = useState<CoffeeData>({
-      name:"",
-      price:"",
-      rating:0,
-      shop:"",
-      description:"",
-      image:""
+      name: "",
+      price: 0,
+      rating: 0,
+      coffeeShopId: "",
+      description: "",
+      image: "",
+      location:"",
+      coffeeShopName:""
     });
 
     const [searchQuery, setSearchQuery] = useState("");
     const [places, setPlaces] = useState<{name: string; place_id: string}[]>([]);
+    const [showDropdown, setShowDropdown] = useState<boolean>(false);
     
     const handleSearch = async (query: string) => {
       setSearchQuery(query);
       if(query.length<3) return;
+      setShowDropdown(true);
 
       try{
         const response = await fetch(
@@ -59,7 +62,6 @@ export default function NewIcedCoffee(){
             headers: {
               "Content-Type":"application/json",
               "X-Goog-Api-Key":process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
-            
               "X-Goog-FieldMask": "places.displayName,places.formattedAddress,places.id",
             },
             body: JSON.stringify({
@@ -93,6 +95,17 @@ export default function NewIcedCoffee(){
       }
     };
 
+    const handlePlaceSelect = (place:any) => {
+      setCoffee((prev)=>({
+        ...prev,
+        coffeeShopId: place.place_id,
+        location: place.formattedAddress,
+        coffeeShopName: place.name
+    }));
+      setSearchQuery(place.name);
+      setShowDropdown(false);
+    };
+
     const handleChange = (e:React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => {
         const {name, value} = e.target;
         setCoffee((prev)=>({
@@ -108,20 +121,46 @@ export default function NewIcedCoffee(){
       }));
     };
 
-    const handleSubmit = (e: React.FormEvent)=> {
-        e.preventDefault();
-        console.log("coffee",coffee);
+    const handleSubmit = async (e: React.FormEvent)=> {
+      e.preventDefault();
+      console.log("coffee",coffee);
 
+      try{
+        const response = await fetch('/api/iced-coffees', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(coffee),
+        });
 
-        // Reset after submission
-        setCoffee({
+        const data = await response.json();
+        if(response.ok){
+          console.log("Coffee added successfully", data);
+
+          setCoffee({
             name:"",
-            shop:"",
-            price:"",
+            price:0,
             rating:0,
+            coffeeShopId:"",
             description:"",
-            image:""
-        })
+            image:"",
+            location:"",
+            coffeeShopName:""
+          });
+
+          setPlaces([]);
+          setSearchQuery("");
+
+        }
+        else{
+          console.error("Error adding coffee:", data);
+        }
+      } 
+      catch(error){
+        console.error("Error submitting coffee:", error);
+      }
+
     };
 
     return(
@@ -176,13 +215,13 @@ export default function NewIcedCoffee(){
                   onChange={(e)=>handleSearch(e.target.value)}
                   required
                 />
-                {searchQuery.length!==0 &&(
+                {(showDropdown&&searchQuery.length!==0 )&&(
                   <ul className="bg-white rounded-xl mt-2 max-h-60 overflow-y-auto custom-scrollbar">
                     {places.map((place)=>(
                       <li
                         key={`${place.place_id}-${place.name}`}
                         className="p-2 hover:bg-[#dde5b6] cursor-pointer rounded-xl"
-                        onClick={()=>setSearchQuery(place.name)}
+                        onClick={()=>handlePlaceSelect(place)}
                       >
                         <div>{place.name}</div>
                         <div className="text-sm text-gray-600">{place.formattedAddress}</div>
@@ -215,7 +254,7 @@ export default function NewIcedCoffee(){
               <div>
                 <label className="block text-md font-medium font-semibold text-[#432818] mb-2">review</label>
                 <textarea
-                  name="review"
+                  name="description"
                   className="w-full p-2 bg-white rounded-xl placeholder:text-sm"
                   placeholder="your thoughts on this iced coffee..."
                   value={coffee.description}
