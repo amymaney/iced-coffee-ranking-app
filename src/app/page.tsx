@@ -11,11 +11,6 @@ const Page: React.FC = () => {
   const router = useRouter();
   const { data: session, status } = useSession();
 
-  // If status is "loading", show a loading state
-  if (status === "loading") {
-    return <p>Loading...</p>;
-  }
-
   // If there's no session (i.e., the user is not logged in)
   const isLoggedIn = !!session;
 
@@ -59,12 +54,21 @@ const Page: React.FC = () => {
 
         {/* Show 'Sign In' button if user is not logged in */}
         {!isLoggedIn && (
-          <button
-            onClick={() => router.push("/api/auth/signin")}
-            className="bg-[#adc178] text-[#432818] px-4 py-2 font-semibold rounded-xl w-60 cursor-pointer block mx-auto mt-3"
-          >
-            sign in
-          </button>
+          <div className="flex flex-row">
+            <button
+              onClick={() => router.push("/api/auth/signin")}
+              className="mr-5 bg-[#adc178] text-[#432818] px-4 py-2 font-semibold rounded-xl w-40 cursor-pointer block mx-auto mt-3"
+            >
+              sign in
+            </button>
+            <button
+              onClick={() => router.push("/pages/signup")}
+              className="ml-5 bg-[#adc178] text-[#432818] px-4 py-2 font-semibold rounded-xl w-40 cursor-pointer block mx-auto mt-3"
+            >
+              sign up
+            </button>
+          </div>
+
         )}
       </div>
 

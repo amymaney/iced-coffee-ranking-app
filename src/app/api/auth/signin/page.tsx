@@ -36,14 +36,14 @@ export default function SignInPage(){
   };
 
   return(
-    <div className="min-h-screen bg-[#a98467] relative flex flex-col">
+    <div className="min-h-screen bg-[#a98467] flex flex-col items-center justify-center">
       <div className="absolute top-6 left-6 z-10">
         <SquareArrowLeft 
           onClick={() => router.push("/")}
           className="cursor-pointer w-8 h-8 text-[#f0ead2]" 
         />
       </div>
-      <div className="w-full max-w-lg mx-auto p-10 bg-[#f0ead2] shadow-md mt-30 rounded-xl">
+      <div className="w-full max-w-lg mx-auto p-10 bg-[#f0ead2] shadow-md rounded-xl">
           <h1 className="text-2xl font-bold mb-4 text-center text-[#432818]">sign in</h1>
           <form className="space-y-4" onSubmit={handleSignIn}>
               <div>
@@ -85,9 +85,12 @@ export default function SignInPage(){
 
               </div>
               {error && <p className="text-[#991218] text-center">{error}</p>}
-              <button type="submit" className="bg-[#adc178] text-[#432818] px-4 py-2 font-semibold rounded-xl w-30 ml-37.5 cursor-pointer">
-                sign in
-              </button>
+              <div className="flex justify-center">
+                <button type="submit" className="bg-[#adc178] text-[#432818] px-4 py-2 font-semibold rounded-xl w-30 cursor-pointer">
+                  sign in
+                </button>
+              </div>
+              
           </form>
       </div>
     </div>

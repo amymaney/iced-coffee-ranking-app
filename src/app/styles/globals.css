@@ -17,4 +17,23 @@ h1, h2 {
 }
 
 
+/* For webkit browsers like Chrome and Safari */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 12px; /* Set the width of the scrollbar */
+  height: 12px; /* Set the height for horizontal scrollbar */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2); /* Scrollbar thumb color */
+  border-radius: 10px; /* Make the scrollbar thumb rounded */
+  border: 3px solid rgb(174, 173, 173); 
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgb(224, 224, 224); /* Track color */
+  border-radius: 5px; /* Make the scrollbar track rounded */
+}
+
+
+
 
