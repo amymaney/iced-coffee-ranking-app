@@ -1,7 +1,6 @@
 "use client";
 
-import React from "react";
-import { coffeeShops } from "./data/coffeeShops";
+import React, { useEffect, useState } from "react";
 import CoffeeShopComponent from "./components/CoffeeShop";
 import { useRouter } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
@@ -13,6 +12,28 @@ const Page: React.FC = () => {
 
   // If there's no session (i.e., the user is not logged in)
   const isLoggedIn = !!session;
+  const [loading, setLoading] = useState(true);
+  const [coffeeShops, setCoffeeShops] = useState<any[]>([]);
+
+  useEffect(()=>{
+    const fetchCoffeeShops = async () => {
+      try{
+        const response = await fetch("/api/coffee-shops");
+        if(!response.ok) throw new Error("Failed to fetch coffee shops");
+
+        const data = await response.json();
+        setCoffeeShops(data);
+      }
+      catch(error){
+        console.error("Error loading coffee shops:", error);
+      }
+      finally{
+        setLoading(false);
+      }
+    };
+
+    fetchCoffeeShops();
+  },[]);
 
   return (
     <div className="min-h-screen bg-[#a98467] relative flex flex-col">

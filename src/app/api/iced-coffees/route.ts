@@ -34,12 +34,12 @@ export async function POST(request: Request) {
                     coffeeShopId,
                     name: coffeeShopName,
                     location,
-                    rating:0,
+                    rating:rating,
                     image:""
                 }
             });
 
-            
+            console.log('New coffee created:', newCoffeeShop);
         }
         else{
             console.log('Coffee shop already exists');
@@ -54,6 +54,16 @@ export async function POST(request: Request) {
                 description,
                 image,
             }
+        });
+
+        const updatedRating = await prisma.icedCoffee.aggregate({
+            where: { coffeeShopId: coffeeShopId},
+            _avg: {rating: true},
+        });
+
+        await prisma.coffeeShop.update({
+            where: {coffeeShopId: coffeeShopId},
+            data: {rating: updatedRating._avg.rating ?? 0},
         });
 
         console.log('New coffee created:', newCoffee);
