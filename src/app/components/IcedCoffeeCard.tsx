@@ -22,10 +22,10 @@ const IcedCoffeeCard: React.FC<IcedCoffeeCardProps> = ({
   return (
     <div className="bg-white p-4 rounded-lg shadow-md">
       <div className="flex justify-between">
-        <h3 className="text-lg font-bold text-[#6c584c] text-left">{name}</h3>
-        <h3 className="text-lg font-bold text-[#dbb42c] text-right">{rating}</h3>
+        <h3 id="coffee-name" className="text-lg font-bold text-[#6c584c] text-left">{name}</h3>
+        <h3 id="coffee-rating" className="text-lg font-bold text-[#dbb42c] text-right pl-2">{rating}</h3>
       </div>
-      <p className="text-sm text-[#a98467]">{description}</p>
+      <p id="coffee-description" className="text-sm text-[#a98467]">{description}</p>
     </div>
   );
 };

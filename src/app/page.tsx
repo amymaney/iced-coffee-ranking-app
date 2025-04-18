@@ -56,7 +56,7 @@ const Page: React.FC = () => {
 
       {/* Main content area */}
       <div className="w-full max-w-xl mx-auto p-10 bg-[#f0ead2] shadow-md mt-10 rounded-xl flex flex-col items-center justify-center">
-        <h1 className="text-4xl font-semibold text-center mb-5 text-[#432818]">
+        <h1 id="page-title" className="text-4xl font-semibold text-center mb-5 text-[#432818]">
           london iced coffees
         </h1>
         <h2 className="text-[#582f0e] mb-5">
@@ -77,6 +77,7 @@ const Page: React.FC = () => {
         {!isLoggedIn && (
           <div className="flex flex-row">
             <button
+              id="sign-in-button"
               onClick={() => router.push("/api/auth/signin")}
               className="mr-5 bg-[#adc178] text-[#432818] px-4 py-2 font-semibold rounded-xl w-40 cursor-pointer block mx-auto mt-3"
             >

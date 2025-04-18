@@ -48,6 +48,7 @@ export default function NewIcedCoffee(){
     const [searchQuery, setSearchQuery] = useState("");
     const [places, setPlaces] = useState<{name: string; place_id: string}[]>([]);
     const [showDropdown, setShowDropdown] = useState<boolean>(false);
+    const [outcomeMsg, setOutcomeMsg] = useState<string>("");
     
     const handleSearch = async (query: string) => {
       setSearchQuery(query);
@@ -155,12 +156,24 @@ export default function NewIcedCoffee(){
         }
         else{
           console.error("Error adding coffee:", data);
+          setOutcomeMsg("Error occurred please try again");
+        setTimeout(() => {
+          setOutcomeMsg(""); 
+        }, 4000);
         }
       } 
       catch(error){
         console.error("Error submitting coffee:", error);
+        setOutcomeMsg("Error occurred please try again");
+        setTimeout(() => {
+          setOutcomeMsg(""); 
+        }, 4000);
       }
 
+      setOutcomeMsg("Coffee successfully submitted");
+      setTimeout(() => {
+        setOutcomeMsg(""); 
+      }, 4000);
     };
 
     return(
@@ -224,7 +237,7 @@ export default function NewIcedCoffee(){
                         onClick={()=>handlePlaceSelect(place)}
                       >
                         <div>{place.name}</div>
-                        <div className="text-sm text-gray-600">{place.formattedAddress}</div>
+                        <div className="text-sm text-gray-600">{place?.formattedAddress}</div>
                       </li>
                     ))}
                   </ul>
@@ -261,6 +274,11 @@ export default function NewIcedCoffee(){
                   onChange={handleChange}
                 />
               </div>
+              {outcomeMsg!==""&&(
+                <p className=" mb-3 font-semibold text-[#656d4a] text-center">
+                  {outcomeMsg}
+                </p>
+              )}
               <button type="submit" className="bg-[#adc178] text-[#432818] px-4 py-2 font-semibold rounded-xl w-full cursor-pointer">
                 submit
               </button>
