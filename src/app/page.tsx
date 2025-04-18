@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import CoffeeShopComponent from "./components/CoffeeShop";
 import { useRouter } from "next/navigation";
-import { useSession, signOut } from "next-auth/react";
+import { useSession, signOut, signIn } from "next-auth/react";
 import { LogOut } from "lucide-react";
 
 const Page: React.FC = () => {
@@ -56,11 +56,11 @@ const Page: React.FC = () => {
 
       {/* Main content area */}
       <div className="w-full max-w-xl mx-auto p-10 bg-[#f0ead2] shadow-md mt-10 rounded-xl flex flex-col items-center justify-center">
-        <h1 id="page-title" className="text-4xl font-semibold text-center mb-5 text-[#432818]">
+        <h1 id="page-title" className="text-4xl font-semibold text-center mb-3 text-[#432818]">
           london iced coffees
         </h1>
         <h2 className="text-[#582f0e] mb-5">
-          sign in to view your iced coffees and log a new one
+          sign in with
         </h2>
 
         {/* Show 'Log a new iced coffee' button only if logged in */}
@@ -75,22 +75,30 @@ const Page: React.FC = () => {
 
         {/* Show 'Sign In' button if user is not logged in */}
         {!isLoggedIn && (
-          <div className="flex flex-row">
+          <div className="flex">
             <button
-              id="sign-in-button"
-              onClick={() => router.push("/api/auth/signin")}
-              className="mr-5 bg-[#adc178] text-[#432818] px-4 py-2 font-semibold rounded-xl w-40 cursor-pointer block mx-auto mt-3"
+              onClick={()=>signIn("google")}
+              className="mr-5 bg-white text-[#432818] px-4 py-2 font-semibold rounded-xl w-35 cursor-pointer block mx-auto flex items-center justify-center"
             >
-              sign in
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/24px-Google_%22G%22_logo.svg.png"
+                alt="Google logo"
+                className="w-6 h-6 mr-3"
+              />
+              <h1>Google</h1>
             </button>
             <button
-              onClick={() => router.push("/pages/signup")}
-              className="ml-5 bg-[#adc178] text-[#432818] px-4 py-2 font-semibold rounded-xl w-40 cursor-pointer block mx-auto mt-3"
+              onClick={()=>signIn("google")}
+              className="bg-white text-[#432818] px-4 py-2 font-semibold rounded-xl w-35 cursor-pointer block mx-auto flex items-center justify-center"
             >
-              sign up
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/512px-Microsoft_logo.svg.png"
+                alt="Microsoft logo"
+                className="w-5 h-5 mr-3"
+              />
+              <h1>Microsoft</h1>
             </button>
           </div>
-
         )}
       </div>
 
