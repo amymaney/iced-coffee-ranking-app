@@ -9,7 +9,7 @@ import Head from "next/head";
 
 interface CoffeeData {
   name: string;
-  price: number;
+  price: string;
   rating: number;
   coffeeShopId: string;
   description: string;
@@ -34,11 +34,9 @@ export default function NewIcedCoffee(){
       }
     }, [session, router]);
 
-    console.log('session id', session?.id);
-
     const [coffee, setCoffee] = useState<CoffeeData>({
       name: "",
-      price: 0,
+      price: "",
       rating: 0,
       coffeeShopId: "",
       description: "",
@@ -143,7 +141,7 @@ export default function NewIcedCoffee(){
 
           setCoffee({
             name:"",
-            price:0,
+            price:"",
             rating:0,
             coffeeShopId:"",
             description:"",
@@ -172,10 +170,7 @@ export default function NewIcedCoffee(){
         }, 4000);
       }
 
-      setOutcomeMsg("Coffee successfully submitted");
-      setTimeout(() => {
-        setOutcomeMsg(""); 
-      }, 4000);
+      router.push("/");
     };
 
     return(

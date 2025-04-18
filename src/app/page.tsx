@@ -57,23 +57,36 @@ const Page: React.FC = () => {
       {/* Main content area */}
       <div className="w-full max-w-xl mx-auto p-10 bg-[#f0ead2] shadow-md mt-10 rounded-xl flex flex-col items-center justify-center">
         <h1 id="page-title" className="text-4xl font-semibold text-center mb-3 text-[#432818]">
-          london iced coffees
+          the bean map
         </h1>
+
+        <h2 className="mb-2">
+          Find your next iced coffee fix across London.
+        </h2>
 
         {/* Show 'Log a new iced coffee' button only if logged in */}
         {isLoggedIn && (
-          <button
-            onClick={() => router.push("/pages/newCoffee")}
-            className="bg-[#adc178] text-[#432818] px-4 py-2 font-semibold rounded-xl w-60 cursor-pointer block mx-auto mt-2"
-          >
-            log a new iced coffee
-          </button>
+          <div>
+            <button
+              onClick={() => router.push("/pages/newCoffee")}
+              className="bg-[#adc178] text-[#432818] px-4 py-2 font-semibold rounded-xl w-60 cursor-pointer block mx-auto mt-2"
+            >
+              log a new iced coffee
+            </button>
+
+            <button
+              onClick={()=> router.push("/pages/yourCoffee")}
+              className="bg-[#adc178] text-[#432818] px-4 py-2 font-semibold rounded-xl w-60 cursor-pointer block mx-auto mt-3"
+            >
+              view your coffees
+            </button>
+          </div>
         )}
 
         {/* Show 'Sign In' button if user is not logged in */}
         {!isLoggedIn && (
           <>
-            <h2 className="text-[#582f0e] mb-5">
+            <h2 className="text-[#582f0e] mb-1">
               sign in with
             </h2>
             <div className="flex">
