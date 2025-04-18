@@ -13,12 +13,46 @@ generator client {
   provider = "prisma-client-js"
 }
 
-
+// Not used at the moment
 model users {
   id            Int           @id @default(autoincrement())
   email         String         @unique
   password      String
 }
+
+model User {
+  id            String        @id @default(uuid())
+  email         String        @unique
+  name          String?
+  emailVerified DateTime?
+  image         String?
+  icedCoffees   IcedCoffee[] 
+  accounts      Account[] 
+  sessions      Session[]
+}
+
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  provider          String
+  providerAccountId String
+  type              String
+  user              User    @relation(fields: [userId], references: [id])
+
+  @@unique([provider, providerAccountId]) // Composite unique constraint
+}
+
+
+model Session {
+  id            String   @id @default(cuid())
+  userId        String
+  expires       DateTime
+  sessionToken  String   @unique
+  accessToken   String
+  user          User     @relation(fields: [userId], references: [id])
+}
+
 
 model CoffeeShop {
   id            Int           @id @default(autoincrement()) // Primary key
@@ -39,4 +73,7 @@ model IcedCoffee {
   image         String
   coffeeShopId  String
   coffeeShop    CoffeeShop    @relation(fields: [coffeeShopId], references: [coffeeShopId])
+  userId        String
+  user          User          @relation(fields: [userId], references: [id])
+  createdAt     DateTime      @default(now())
 }

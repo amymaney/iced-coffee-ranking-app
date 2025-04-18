@@ -1,10 +1,18 @@
 import { NextResponse } from "next/server";
-import {prisma} from '@/lib/prisma';
+import { prisma } from '@/lib/prisma';
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 export async function POST(request: Request) {
     try{
-        const {name, price, rating, coffeeShopId, description, image, location, coffeeShopName} = await request.json();
-        console.log("Received body:", { name, price, rating, description, image, coffeeShopId, location, coffeeShopName });
+
+        const session = await getServerSession(authOptions);
+        if(!session||!session.id){
+            return NextResponse.json({error:"Unauthorised"}, {status: 401});
+        }
+
+        const {name, price, rating, coffeeShopId, description, image, location, coffeeShopName, userId} = await request.json();
+        console.log("Received body:", { name, price, rating, description, image, coffeeShopId, location, coffeeShopName, userId });
 
         const priceFloat = parseFloat(price);
 
@@ -53,16 +61,17 @@ export async function POST(request: Request) {
                 coffeeShopId,
                 description,
                 image,
+                userId: session.id
             }
         });
 
         const updatedRating = await prisma.icedCoffee.aggregate({
-            where: { coffeeShopId: coffeeShopId},
+            where: { coffeeShopId },
             _avg: {rating: true},
         });
 
         await prisma.coffeeShop.update({
-            where: {coffeeShopId: coffeeShopId},
+            where: { coffeeShopId },
             data: {rating: updatedRating._avg.rating ?? 0},
         });
 

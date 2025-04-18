@@ -59,15 +59,12 @@ const Page: React.FC = () => {
         <h1 id="page-title" className="text-4xl font-semibold text-center mb-3 text-[#432818]">
           london iced coffees
         </h1>
-        <h2 className="text-[#582f0e] mb-5">
-          sign in with
-        </h2>
 
         {/* Show 'Log a new iced coffee' button only if logged in */}
         {isLoggedIn && (
           <button
             onClick={() => router.push("/pages/newCoffee")}
-            className="bg-[#adc178] text-[#432818] px-4 py-2 font-semibold rounded-xl w-60 cursor-pointer block mx-auto"
+            className="bg-[#adc178] text-[#432818] px-4 py-2 font-semibold rounded-xl w-60 cursor-pointer block mx-auto mt-2"
           >
             log a new iced coffee
           </button>
@@ -75,30 +72,35 @@ const Page: React.FC = () => {
 
         {/* Show 'Sign In' button if user is not logged in */}
         {!isLoggedIn && (
-          <div className="flex">
-            <button
-              onClick={()=>signIn("google")}
-              className="mr-5 bg-white text-[#432818] px-4 py-2 font-semibold rounded-xl w-35 cursor-pointer block mx-auto flex items-center justify-center"
-            >
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/24px-Google_%22G%22_logo.svg.png"
-                alt="Google logo"
-                className="w-6 h-6 mr-3"
-              />
-              <h1>Google</h1>
-            </button>
-            <button
-              onClick={()=>signIn("google")}
-              className="bg-white text-[#432818] px-4 py-2 font-semibold rounded-xl w-35 cursor-pointer block mx-auto flex items-center justify-center"
-            >
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/512px-Microsoft_logo.svg.png"
-                alt="Microsoft logo"
-                className="w-5 h-5 mr-3"
-              />
-              <h1>Microsoft</h1>
-            </button>
-          </div>
+          <>
+            <h2 className="text-[#582f0e] mb-5">
+              sign in with
+            </h2>
+            <div className="flex">
+              <button
+                onClick={()=>signIn("google")}
+                className="mr-5 bg-white text-[#432818] px-4 py-2 font-semibold rounded-xl w-35 cursor-pointer block mx-auto flex items-center justify-center"
+              >
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/24px-Google_%22G%22_logo.svg.png"
+                  alt="Google logo"
+                  className="w-6 h-6 mr-3"
+                />
+                <h1>Google</h1>
+              </button>
+              <button
+                onClick={()=>signIn("microsoft")}
+                className="bg-white text-[#432818] px-4 py-2 font-semibold rounded-xl w-35 cursor-pointer block mx-auto flex items-center justify-center"
+              >
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/512px-Microsoft_logo.svg.png"
+                  alt="Microsoft logo"
+                  className="w-5 h-5 mr-3"
+                />
+                <h1>Microsoft</h1>
+              </button>
+            </div>
+          </>
         )}
       </div>
 

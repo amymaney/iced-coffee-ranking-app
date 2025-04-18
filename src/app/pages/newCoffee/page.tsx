@@ -30,9 +30,11 @@ export default function NewIcedCoffee(){
     
     useEffect(() => {
       if (!session) {
-        router.push("/"); // Redirect to home after signing in
+        router.push("/"); 
       }
     }, [session, router]);
+
+    console.log('session id', session?.id);
 
     const [coffee, setCoffee] = useState<CoffeeData>({
       name: "",
@@ -46,7 +48,7 @@ export default function NewIcedCoffee(){
     });
 
     const [searchQuery, setSearchQuery] = useState("");
-    const [places, setPlaces] = useState<{name: string; place_id: string}[]>([]);
+    const [places, setPlaces] = useState<{name: string; place_id: string; formattedAddress: string}[]>([]);
     const [showDropdown, setShowDropdown] = useState<boolean>(false);
     const [outcomeMsg, setOutcomeMsg] = useState<string>("");
     
