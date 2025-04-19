@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
-    "types": ["jest"],
+    "typeRoots": ["./types", "./node_modules/@types"],
+    "types": ["jest","google.maps"],
     "target": "ES2017",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,

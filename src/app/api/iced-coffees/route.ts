@@ -11,8 +11,8 @@ export async function POST(request: Request) {
             return NextResponse.json({error:"Unauthorised"}, {status: 401});
         }
 
-        const {name, price, rating, coffeeShopId, description, image, location, coffeeShopName, userId} = await request.json();
-        console.log("Received body:", { name, price, rating, description, image, coffeeShopId, location, coffeeShopName, userId });
+        const {name, price, rating, coffeeShopId, description, image, location, coffeeShopName, userId, lat, lng} = await request.json();
+        console.log("Received body:", { name, price, rating, description, image, coffeeShopId, location, coffeeShopName, userId, lat, lng });
 
         const priceFloat = parseFloat(price);
 
@@ -23,7 +23,7 @@ export async function POST(request: Request) {
             );
         }
 
-        if(!name||!price||!rating||!coffeeShopId||!location||!coffeeShopName){
+        if(!name||!price||!rating||!coffeeShopId||!location||!coffeeShopName||lat==undefined||lng===undefined){
             console.error("Missing fields");
             return NextResponse.json(
                 {error:'Missing required fields'},
@@ -42,6 +42,8 @@ export async function POST(request: Request) {
                     coffeeShopId,
                     name: coffeeShopName,
                     location,
+                    lat,
+                    lng,
                     rating:rating,
                     image:""
                 }

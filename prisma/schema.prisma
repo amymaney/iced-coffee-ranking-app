@@ -59,6 +59,8 @@ model CoffeeShop {
   coffeeShopId  String        @unique
   name          String
   location      String
+  lat           Float?
+  lng           Float?
   rating        Float
   image         String
   icedCoffees   IcedCoffee[]

@@ -4,6 +4,9 @@
 
 @import "tailwindcss";
 @import url("https://fonts.googleapis.com/css2?family=Big+Shoulders:opsz,wght@10..72,100..900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
+
+
 /* globals.css */
 
 /* :root {
@@ -16,6 +19,10 @@ h1, h2 {
   font-family: 'Big Shoulders', sans-serif;
 }
 
+.font-roboto-mono{
+  font-family: 'Roboto Mono', monospace;
+  font-weight: 700;
+}
 
 /* For webkit browsers like Chrome and Safari */
 .custom-scrollbar::-webkit-scrollbar {

@@ -5,6 +5,7 @@
     extend: {
       fontFamily: {
         bigShoulders: ['"Big Shoulders"', 'sans-serif'],
+        'roboto-mono': ['Roboto Mono', 'monospace'],
       },
     },
   },

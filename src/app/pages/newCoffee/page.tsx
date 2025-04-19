@@ -16,23 +16,19 @@ interface CoffeeData {
   image: string;
   location: string;
   coffeeShopName: string;
-}
-
-declare global {
-  interface Window {
-    google: any;
-  }
+  lat: number;
+  lng: number;
 }
 
 export default function NewIcedCoffee(){
   const router = useRouter();
     const { data: session, status } = useSession();
-    
     useEffect(() => {
+      if (status === "loading") return; // If session is still loading, don't do anything.
       if (!session) {
-        router.push("/"); 
+        router.push("/"); // Redirect to home page if the user is not logged in
       }
-    }, [session, router]);
+    }, [session, status, router]);
 
     const [coffee, setCoffee] = useState<CoffeeData>({
       name: "",
@@ -42,7 +38,9 @@ export default function NewIcedCoffee(){
       description: "",
       image: "",
       location:"",
-      coffeeShopName:""
+      coffeeShopName:"",
+      lat:0,
+      lng:0
     });
 
     const [searchQuery, setSearchQuery] = useState("");
@@ -96,16 +94,35 @@ export default function NewIcedCoffee(){
       }
     };
 
-    const handlePlaceSelect = (place:any) => {
-      setCoffee((prev)=>({
+    const handlePlaceSelect = async (place: any) => {
+      setCoffee((prev) => ({
         ...prev,
         coffeeShopId: place.place_id,
         location: place.formattedAddress,
         coffeeShopName: place.name
-    }));
+      }));
       setSearchQuery(place.name);
       setShowDropdown(false);
+    
+      // Fetch latitude and longitude from your new API route
+      try {
+        const response = await fetch(`/api/places?place_id=${place.place_id}`);
+        const data = await response.json();
+    
+        if (response.ok && data.lat && data.lng) {
+          setCoffee((prev) => ({
+            ...prev,
+            lat: data.lat,
+            lng: data.lng,
+          }));
+        } else {
+          console.error("Error fetching latitude and longitude:", data.error);
+        }
+      } catch (error) {
+        console.error("Error fetching place details:", error);
+      }
     };
+     
 
     const handleChange = (e:React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => {
         const {name, value} = e.target;
@@ -147,7 +164,9 @@ export default function NewIcedCoffee(){
             description:"",
             image:"",
             location:"",
-            coffeeShopName:""
+            coffeeShopName:"",
+            lat:0,
+            lng:0
           });
 
           setPlaces([]);
