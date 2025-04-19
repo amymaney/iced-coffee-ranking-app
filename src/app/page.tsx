@@ -42,6 +42,15 @@ const Page: React.FC = () => {
     fetchCoffeeShops();
   },[]);
 
+  if (loading) {
+    // You can add a loading spinner, skeleton, or just a blank screen until the page is ready
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-[#fffcf4]">
+        <div className="loader">Loading...</div> {/* Add your loader component or text */}
+      </div>
+    );
+  }
+
   return(
     <div>
       <div className="flex justify-between bg-[#fffcf4] h-15">
@@ -58,11 +67,11 @@ const Page: React.FC = () => {
               Home
             </h3>
           </div>
-          <h3 className="cursor-pointer py-2 px-3 ">Explore</h3>
+          <h3 className="cursor-pointer py-2 px-3 hover:bg-[#f7edda] hover:rounded-2xl">Explore</h3>
           {isLoggedIn&&(
             <>
-              <h3 className="cursor-pointer py-2 px-3 ">Your coffees</h3>
-              <h3 onClick={() => router.push("/pages/newCoffee")} className="cursor-pointer py-2 px-3 ">Log new</h3>
+              <h3 className="cursor-pointer py-2 px-3 hover:bg-[#f7edda] hover:rounded-2xl">Your coffees</h3>
+              <h3 onClick={() => router.push("/pages/newCoffee")} className="cursor-pointer py-2 px-3 hover:bg-[#f7edda] hover:rounded-2xl">Log new</h3>
             </>
           )}
           {!isLoggedIn&&(
@@ -71,9 +80,9 @@ const Page: React.FC = () => {
             </>
           )}
         </div>
-        <div className="px-6 py-4">
+        <div className="px-6 py-3 items-center">
           {isLoggedIn&&(
-            <h3 onClick={() => signOut()} className="cursor-pointer text-[#4c3730]">
+            <h3 onClick={() => signOut()} className="cursor-pointer text-[#4c3730] py-2 px-3 hover:bg-[#f7edda] hover:rounded-2xl">
               Sign out
             </h3>
           )}

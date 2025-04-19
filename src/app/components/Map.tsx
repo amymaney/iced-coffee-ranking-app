@@ -59,6 +59,8 @@ export default function Map({ coffeeShops }: Props) {
       mapId:"23d1afba9d0a35d"
     });
 
+    const infoWindow = new google.maps.InfoWindow(); 
+
     coffeeShops.forEach((shop) => {
       // Only add marker if lat/lng are valid numbers
       if (typeof shop.lat === "number" && typeof shop.lng === "number") {
@@ -75,11 +77,22 @@ export default function Map({ coffeeShops }: Props) {
         const { AdvancedMarkerElement } = (google.maps as any).marker;
 
         if (AdvancedMarkerElement) {
-          new AdvancedMarkerElement({
+          const marker = new AdvancedMarkerElement({
             map,
             position: { lat: shop.lat, lng: shop.lng },
             title: shop.name,
             content: markerDiv,
+          });
+          
+          // Show info window on click
+          marker.addListener("click", () => {
+            infoWindow.setContent(`
+              <div style="padding: 8px;">
+                <strong>${shop.name}</strong><br/>
+                ${shop.location}
+              </div>
+            `);
+            infoWindow.open(map, marker);
           });
         } else {
           console.warn("AdvancedMarkerElement is not available");
