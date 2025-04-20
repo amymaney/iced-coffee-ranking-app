@@ -9,6 +9,20 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { MarkerMap } from "./components/Map";
 
+type Coffee = {
+  id: number;
+  name: string;
+  price: number;
+  rating: number;
+  description: string;
+  coffeeShop: {
+    name: string;
+    coffeeShopId:string;
+    lat: number;
+    lng: number;
+  };
+};
+
 const Map = dynamic(()=> import('./components/Map'), {ssr: false})
 
 const Page: React.FC = () => {
@@ -21,19 +35,34 @@ const Page: React.FC = () => {
   const isLoggedIn = !!session;
   const [loading, setLoading] = useState(true);
   const [coffeeShops, setCoffeeShops] = useState<any[]>([]);
+  const [fiveStarCoffee, setFiveStarCoffee] = useState<Coffee>();
 
   useEffect(()=>{
     const fetchCoffeeShops = async () => {
       try{
-        const response = await fetch("/api/coffee-shops?limit=3");
+        const response = await fetch("/api/coffee-shops?limit=4");
         if(!response.ok) throw new Error("Failed to fetch coffee shops");
 
         const data = await response.json();
-        console.log('data', data);
+        console.log('coffee shops', data);
         setCoffeeShops(data);
       }
       catch(error){
         console.error("Error loading coffee shops:", error);
+      }
+    };
+
+    const fetchFiveStarCoffee = async () => {
+      try{
+        const response = await fetch("/api/coffees?rating=5&noUser=true&limit=1");
+        if(!response.ok) throw new Error("Failed to fetch coffee");
+
+        const data = await response.json();
+        console.log("coffees", data);
+        setFiveStarCoffee(data[0]);
+      }
+      catch(error){
+        console.log("Error loading coffee", error);
       }
       finally{
         setLoading(false);
@@ -41,6 +70,8 @@ const Page: React.FC = () => {
     };
 
     fetchCoffeeShops();
+    fetchFiveStarCoffee();
+
   },[]);
 
   const handleMouseEnter = (id: number) => {
@@ -154,6 +185,20 @@ const Page: React.FC = () => {
                 </button>
               </>
             )}
+            {isLoggedIn&&(
+              <>  
+                <h3 className="text-[#6F4E37] text-xl text-left">5⭐ coffee spotlight</h3>
+                <div className="w-full bg-[#FFFCF4] px-6 py-5 rounded-3xl mb-5 flex justify-between">
+                  <div className="">
+                    <h2 className="text-[#6F4E37] text-xl font-extrabold">{fiveStarCoffee?.name}</h2>
+                    <h3 className="text-[#6F4E37] text-lg">{fiveStarCoffee?.coffeeShop?.name} - £{fiveStarCoffee?.price}</h3>
+                  </div>
+                  <div className=" text-right">
+                    <h2 className="text-md" style={{ color: "rgba(111, 78, 55, 0.75)" }}>{fiveStarCoffee?.description}</h2>
+                  </div>
+                </div>
+              </>
+            )}
             <Map coffeeShops={coffeeShops} onMarkersReady={setMarkerMap} />
 
           </div>
@@ -163,96 +208,6 @@ const Page: React.FC = () => {
     </div>
   )
 
-  // return (
-  //   <div className="min-h-screen bg-[#a98467] relative flex flex-col">
-  //     {/* Display this section only if user is logged in */}
-  //     {isLoggedIn && (
-  //       <div className="flex justify-between items-center mt-4 ml-8 mr-10">
-  //         <div className="text-lg font-bold pr-4 pt-0.25 text-[#f0ead2]">
-  //           <h2>{session.user?.email}</h2>
-  //         </div>
-
-  //         <div
-  //           className="flex flex-row text-[#f0ead2] cursor-pointer w"
-  //           onClick={() => signOut()} // Log out the user
-  //         >
-  //           <h2 className="text-lg font-bold pr-4 pt-0.25">sign out</h2>
-  //           <LogOut className="w-8 h-8" />
-  //         </div>
-  //       </div>
-  //     )}
-
-  //     {/* Main content area */}
-  //     <div className="w-full max-w-xl mx-auto p-10 bg-[#f0ead2] shadow-md mt-10 rounded-xl flex flex-col items-center justify-center">
-  //       <h1 id="page-title" className="text-4xl font-semibold text-center mb-3 text-[#432818]">
-  //         the bean map
-  //       </h1>
-
-  //       <h2 className="mb-2">
-  //         Find your next iced coffee fix across London.
-  //       </h2>
-
-  //       {/* Show 'Log a new iced coffee' button only if logged in */}
-  //       {isLoggedIn && (
-  //         <div>
-  //           <button
-  //             onClick={() => router.push("/pages/newCoffee")}
-  //             className="bg-[#adc178] text-[#432818] px-4 py-2 font-semibold rounded-xl w-60 cursor-pointer block mx-auto mt-2"
-  //           >
-  //             log a new iced coffee
-  //           </button>
-
-  //           <button
-  //             onClick={()=> router.push("/pages/yourCoffee")}
-  //             className="bg-[#adc178] text-[#432818] px-4 py-2 font-semibold rounded-xl w-60 cursor-pointer block mx-auto mt-3"
-  //           >
-  //             view your coffees
-  //           </button>
-  //         </div>
-  //       )}
-
-  //       {/* Show 'Sign In' button if user is not logged in */}
-  //       {!isLoggedIn && (
-  //         <>
-  //           <h2 className="text-[#582f0e] mb-1">
-  //             sign in with
-  //           </h2>
-  //           <div className="flex">
-  //             <button
-  //               onClick={()=>signIn("google")}
-  //               className="mr-5 bg-white text-[#432818] px-4 py-2 font-semibold rounded-xl w-35 cursor-pointer block mx-auto flex items-center justify-center"
-  //             >
-  //               <img
-  //                 src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/24px-Google_%22G%22_logo.svg.png"
-  //                 alt="Google logo"
-  //                 className="w-6 h-6 mr-3"
-  //               />
-  //               <h1>Google</h1>
-  //             </button>
-  //             <button
-  //               onClick={()=>signIn("microsoft")}
-  //               className="bg-white text-[#432818] px-4 py-2 font-semibold rounded-xl w-35 cursor-pointer block mx-auto flex items-center justify-center"
-  //             >
-  //               <img
-  //                 src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/512px-Microsoft_logo.svg.png"
-  //                 alt="Microsoft logo"
-  //                 className="w-5 h-5 mr-3"
-  //               />
-  //               <h1>Microsoft</h1>
-  //             </button>
-  //           </div>
-  //         </>
-  //       )}
-  //     </div>
-
-  //     {/* Display coffee shop list */}
-      // <div className="mb-20">
-      //   {coffeeShops.map((coffeeShop) => (
-      //     <CoffeeShopComponent key={coffeeShop.id} coffeeShop={coffeeShop} />
-      //   ))}
-      // </div>
-  //   </div>
-  // );
 };
 
 export default Page;

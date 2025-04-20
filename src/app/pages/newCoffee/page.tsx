@@ -144,7 +144,7 @@ export default function NewIcedCoffee(){
       console.log("coffee",coffee);
 
       try{
-        const response = await fetch('/api/iced-coffees', {
+        const response = await fetch('/api/coffees', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

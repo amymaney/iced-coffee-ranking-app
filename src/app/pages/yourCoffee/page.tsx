@@ -22,16 +22,16 @@ export default function YourCoffees(){
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchCoffees = async () => {
-          const res = await fetch("/api/user-coffees");
-          if (res.ok) {
-            const data = await res.json();
-            setCoffees(data);
-          }
-          setLoading(false);
-        };
+      const fetchCoffees = async () => {
+        const res = await fetch("/api/coffees");
+        if (res.ok) {
+          const data = await res.json();
+          setCoffees(data);
+        }
+        setLoading(false);
+      };
     
-        fetchCoffees();
+      fetchCoffees();
     }, []);
     
     if (status === "loading" || loading) {
