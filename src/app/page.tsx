@@ -24,7 +24,7 @@ const Page: React.FC = () => {
   useEffect(()=>{
     const fetchCoffeeShops = async () => {
       try{
-        const response = await fetch("/api/coffee-shops?limit=4");
+        const response = await fetch("/api/coffee-shops?limit=3");
         if(!response.ok) throw new Error("Failed to fetch coffee shops");
 
         const data = await response.json();
