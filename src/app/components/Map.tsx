@@ -69,10 +69,10 @@ const Map = forwardRef(function Map({ coffeeShops, onMarkersReady }: MapProps, r
     const markerLib = (google.maps as any).marker;
     if (!markerLib?.AdvancedMarkerElement) return;
 
+
     coffeeShops.forEach((shop) => {
       if (typeof shop.lat === "number" && typeof shop.lng === "number") {
         const markerDiv = document.createElement("div");
-
         const img = document.createElement("img");
         img.src = "/coffee-bean.png";
         img.style.width = "25px";
@@ -97,7 +97,7 @@ const Map = forwardRef(function Map({ coffeeShops, onMarkersReady }: MapProps, r
   return (
     <div
       ref={mapRef}
-      className="w-full h-[450px] rounded-xl mt-4 mb-4"
+      className="w-full h-[450px] rounded-3xl mt-4 mb-4"
     />
   );
 });
