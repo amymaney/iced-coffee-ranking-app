@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import CoffeeShopCoffeeOnly from "./components/CoffeeShopOnly";
 import { useRouter } from "next/navigation";
 import { useSession, signOut, signIn } from "next-auth/react";
-import { LogOut } from "lucide-react";
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { MarkerMap } from "./components/Map";
@@ -199,7 +198,11 @@ const Page: React.FC = () => {
                 </div>
               </>
             )}
-            <Map coffeeShops={coffeeShops} onMarkersReady={setMarkerMap} />
+            <Map 
+              coffeeShops={coffeeShops} 
+              onMarkersReady={setMarkerMap} 
+              highlightedCoffee={fiveStarCoffee}
+            />
 
           </div>
         </div>

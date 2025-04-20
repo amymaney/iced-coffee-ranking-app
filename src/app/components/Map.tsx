@@ -22,7 +22,27 @@ interface MapProps {
   onMarkersReady?: (markerMap: MarkerMap) => void;
 }
 
-const Map = forwardRef(function Map({ coffeeShops, onMarkersReady }: MapProps, ref) {
+type Coffee = {
+  id: number;
+  name: string;
+  price: number;
+  rating: number;
+  description: string;
+  coffeeShop: {
+    name: string;
+    coffeeShopId:string;
+    lat: number;
+    lng: number;
+  };
+};
+
+interface MapProps {
+  coffeeShops: CoffeeShop[];
+  highlightedCoffee?: Coffee;
+  onMarkersReady?: (markerMap: MarkerMap) => void;
+}
+
+const Map = forwardRef(function Map({ coffeeShops, highlightedCoffee, onMarkersReady }: MapProps, ref) {
   const mapRef = useRef<HTMLDivElement>(null);
   const [mapLoaded, setMapLoaded] = useState(false);
 
@@ -92,7 +112,28 @@ const Map = forwardRef(function Map({ coffeeShops, onMarkersReady }: MapProps, r
     });
 
     onMarkersReady?.(markerMap);
+
+    // Add highlighted coffee marker (5⭐ coffee)
+    if (highlightedCoffee?.coffeeShop?.lat && highlightedCoffee?.coffeeShop?.lng) {
+      const emojiDiv = document.createElement("div");
+      emojiDiv.textContent = "⭐";
+      emojiDiv.style.fontSize = "30px"; 
+      emojiDiv.style.transform = "translate(-50%, -50%)"; 
+      emojiDiv.style.position = "relative";
+    
+      const spotlightMarker = new markerLib.AdvancedMarkerElement({
+        map,
+        position: {
+          lat: highlightedCoffee.coffeeShop.lat,
+          lng: highlightedCoffee.coffeeShop.lng,
+        },
+        title: `⭐ ${highlightedCoffee.name}`,
+        content: emojiDiv,
+      });
+    }
+    
   }, [coffeeShops, mapLoaded, onMarkersReady]);
+
 
   return (
     <div
