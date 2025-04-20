@@ -7,6 +7,7 @@ import { useSession, signOut, signIn } from "next-auth/react";
 import { LogOut } from "lucide-react";
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
+import { MarkerMap } from "./components/Map";
 
 const Map = dynamic(()=> import('./components/Map'), {ssr: false})
 
@@ -14,7 +15,7 @@ const Page: React.FC = () => {
   const router = useRouter();
   const { data: session, status } = useSession();
 
-  console.log('session',session);
+  const [markerMap, setMarkerMap] = useState<{ [id: number]: google.maps.marker.AdvancedMarkerElement }>({});
 
   // If there's no session (i.e., the user is not logged in)
   const isLoggedIn = !!session;
@@ -41,6 +42,22 @@ const Page: React.FC = () => {
 
     fetchCoffeeShops();
   },[]);
+
+  const handleMouseEnter = (id: number) => {
+    const marker = markerMap[id];
+    if (marker && marker.content instanceof HTMLElement) {
+      marker.content.style.transform = "scale(1.5)";
+      marker.content.style.transition = "transform 0.2s ease";
+    }
+  };
+  
+  const handleMouseLeave = (id: number) => {
+    const marker = markerMap[id];
+    if (marker && marker.content instanceof HTMLElement) {
+      marker.content.style.transform = "scale(1)";
+    }
+  };
+  
 
   if (loading) {
     // You can add a loading spinner, skeleton, or just a blank screen until the page is ready
@@ -103,7 +120,12 @@ const Page: React.FC = () => {
             <h3 className="text-[#6F4E37] text-xl text-left">top coffee shops</h3>
             <div className="space-y-6 mt-4 mb-10">
               {coffeeShops.map((coffeeShop) => (
-                <CoffeeShopCoffeeOnly key={coffeeShop.id} coffeeShop={coffeeShop} />
+                <CoffeeShopCoffeeOnly 
+                  key={coffeeShop.id} 
+                  coffeeShop={coffeeShop} 
+                  onHover={() => handleMouseEnter(coffeeShop.id)}
+                  onLeave={() => handleMouseLeave(coffeeShop.id)}
+                />
               ))}
             </div>
           </div>
@@ -132,7 +154,8 @@ const Page: React.FC = () => {
                 </button>
               </>
             )}
-            <Map coffeeShops={coffeeShops}/>
+            <Map coffeeShops={coffeeShops} onMarkersReady={setMarkerMap} />
+
           </div>
         </div>
        
