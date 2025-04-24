@@ -20,6 +20,7 @@ export type MarkerMap = Record<number, google.maps.marker.AdvancedMarkerElement>
 interface MapProps {
   coffeeShops: CoffeeShop[];
   onMarkersReady?: (markerMap: MarkerMap) => void;
+  isLoggedIn: boolean;
 }
 
 type Coffee = {
@@ -42,7 +43,7 @@ interface MapProps {
   onMarkersReady?: (markerMap: MarkerMap) => void;
 }
 
-const Map = forwardRef(function Map({ coffeeShops, highlightedCoffee, onMarkersReady }: MapProps, ref) {
+const Map = forwardRef(function Map({ coffeeShops, highlightedCoffee, onMarkersReady, isLoggedIn }: MapProps, ref) {
   const mapRef = useRef<HTMLDivElement>(null);
   const [mapLoaded, setMapLoaded] = useState(false);
 
@@ -138,7 +139,9 @@ const Map = forwardRef(function Map({ coffeeShops, highlightedCoffee, onMarkersR
   return (
     <div
       ref={mapRef}
-      className="w-full h-[450px] rounded-3xl mt-4 mb-4"
+      className={`w-full rounded-3xl mt-1.5 mb-4 
+        ${isLoggedIn ? 'h-[412px]' : 'h-[510px]'} 
+      `}      
     />
   );
 });

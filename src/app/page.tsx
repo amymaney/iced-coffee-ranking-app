@@ -36,13 +36,20 @@ const Page: React.FC = () => {
   const [coffeeShops, setCoffeeShops] = useState<any[]>([]);
   const [fiveStarCoffee, setFiveStarCoffee] = useState<Coffee>();
 
+  console.log('session', session);
+
   useEffect(()=>{
     const fetchCoffeeShops = async () => {
       try{
-        const response = await fetch("/api/coffee-shops?limit=4");
-        if(!response.ok) throw new Error("Failed to fetch coffee shops");
+        // const isXL = window.matchMedia("(min-width: 1280px)").matches;
+        // const limit = isXL ? 5 : 4;
+        // const response = await fetch(`/api/coffee-shops?limit=${limit}`);
 
+        const response = await fetch(`/api/coffee-shops?limit=4`);
+        if(!response.ok) throw new Error("Failed to fetch coffee shops");
+      
         const data = await response.json();
+        console.log({ data })
         console.log('coffee shops', data);
         setCoffeeShops(data);
       }
@@ -90,10 +97,9 @@ const Page: React.FC = () => {
   
 
   if (loading) {
-    // You can add a loading spinner, skeleton, or just a blank screen until the page is ready
     return (
       <div className="flex items-center justify-center min-h-screen bg-[#fffcf4]">
-        <div className="loader">Loading...</div> {/* Add your loader component or text */}
+        <div className="loader">Loading...</div>
       </div>
     );
   }
@@ -101,7 +107,8 @@ const Page: React.FC = () => {
   return(
     <div>
       <Header isLoggedIn={isLoggedIn} activePage="home" />
-      <div className="bg-[#f7edda] min-h-screen flex flex-col items-center pt-6">
+      <div className="bg-[#f7edda] min-h-screen flex flex-col items-center pt-3">
+        <h3 className="text-[#6F4E37] self-end pr-6">{session?.email}</h3>
         <div className="mb-8">
           <h1 className="text-[#6F4E37] text-center text-5xl font-roboto-mono pb-3">the bean map</h1>
           <h2 className="text-[#6F4E37] text-xl">for londoners who like their coffee on the rocks.</h2>
@@ -120,31 +127,35 @@ const Page: React.FC = () => {
               ))}
             </div>
           </div>
-          <div className="w-2/5 px-2 py-2 space-y-4">
-            {!isLoggedIn&&(
-              <>
-                <button 
-                  onClick={()=>signIn("google")}
-                  className="bg-[#FFFCF4] w-full px-3 py-3 rounded-3xl cursor-pointer text-center flex items-center justify-center">
-                  <img
-                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/240px-Google_%22G%22_logo.svg.png"
-                    alt="Google logo"
-                    className="w-7 h-7 mr-5"
-                  />
-                  <h3 className="text-[#4C3730] text-xl">Sign in with Google</h3>
-                </button>
-                <button 
-                  onClick={()=>signIn("microsoft")}
-                  className="bg-[#FFFCF4] w-full px-3 py-3 rounded-3xl cursor-pointer text-center flex items-center justify-center">
-                  <img
-                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/512px-Microsoft_logo.svg.png"
-                    alt="Google logo"
-                    className="w-6 h-6 mr-5"
-                  />
-                  <h3 className="text-[#4C3730] text-xl">Sign in with Microsoft</h3>
-                </button>
-              </>
-            )}
+          <div className="w-2/5 px-2 py-2 space-y-4 flex flex-col">
+            <div className="flex flex-row gap-5 w-full items-center">
+              {!isLoggedIn&&(
+                <>
+                  <button 
+                    onClick={()=>signIn("google")}
+                    className="bg-[#FFFCF4] w-full px-3 py-3 rounded-3xl cursor-pointer text-center flex items-center justify-center
+                      transition-all duration-200 hover:shadow-lg shadow-md">
+                    <img
+                      src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/240px-Google_%22G%22_logo.svg.png"
+                      alt="Google logo"
+                      className="w-7 h-7 mr-5"
+                    />
+                    <h3 className="text-[#4C3730] text-xl">Sign in with Google</h3>
+                  </button>
+                  <button 
+                    onClick={()=>signIn("microsoft")}
+                    className="bg-[#FFFCF4] w-full px-3 py-3 rounded-3xl cursor-pointer text-center flex items-center justify-center
+                      transition-all duration-200 hover:shadow-lg shadow-md">
+                    <img
+                      src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/512px-Microsoft_logo.svg.png"
+                      alt="Google logo"
+                      className="w-6 h-6 mr-5"
+                    />
+                    <h3 className="text-[#4C3730] text-xl">Sign in with Microsoft</h3>
+                  </button>
+                </>
+              )}
+            </div>
             {isLoggedIn&&(
               <>  
                 <h3 className="text-[#6F4E37] text-xl text-left">5⭐ coffee spotlight</h3>
@@ -159,10 +170,12 @@ const Page: React.FC = () => {
                 </div>
               </>
             )}
+           
             <Map 
               coffeeShops={coffeeShops} 
               onMarkersReady={setMarkerMap} 
               highlightedCoffee={fiveStarCoffee}
+              isLoggedIn={isLoggedIn}
             />
 
           </div>

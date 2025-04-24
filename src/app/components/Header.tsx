@@ -5,7 +5,7 @@ import { signOut } from "next-auth/react";
 
 interface HeaderProps {
     isLoggedIn: boolean;
-    activePage?: "home" | "explore" | "your-coffees" | "log-new";
+    activePage?: "home" | "explore" | "your-coffees" | "log-new" | "my-profile";
 }
 
 export default function Header({isLoggedIn, activePage}: HeaderProps){
@@ -30,15 +30,31 @@ export default function Header({isLoggedIn, activePage}: HeaderProps){
                 <h3 onClick={() => router.push("/")} className={linkClass("home")}>
                     Home
                 </h3>
-                <h3 className={linkClass("explore")}>Explore</h3>
+                <h3 
+                    className={linkClass("explore")}
+                    onClick={() => router.push("/pages/explore")}
+                >
+                    Explore
+                </h3>
                 {isLoggedIn ? (
                     <>
-                        <h3 className={linkClass("your-coffees")}>Your coffees</h3>
-                        <h3
-                        onClick={() => router.push("/pages/newCoffee")}
-                        className={linkClass("log-new")}
+                        <h3 
+                            onClick={() => router.push("/pages/yourCoffee")}
+                            className={linkClass("your-coffees")}
                         >
-                        Log new
+                            Your coffees
+                        </h3>
+                        <h3
+                            onClick={() => router.push("/pages/newCoffee")}
+                            className={linkClass("log-new")}
+                        >
+                            Log new
+                        </h3>
+                        <h3
+                            onClick={() => router.push("/pages/myProfile")}
+                            className={linkClass("my-profile")}
+                        >
+                            My profile
                         </h3>
                     </>
                     ) : (
@@ -48,7 +64,7 @@ export default function Header({isLoggedIn, activePage}: HeaderProps){
             <div className="px-6 py-2 items-center">
                 {isLoggedIn ? (
                 <h3
-                    onClick={() => signOut()}
+                    onClick={() => signOut({ callbackUrl: "/" })}
                     className={linkClass("")}
                 >
                     Sign out

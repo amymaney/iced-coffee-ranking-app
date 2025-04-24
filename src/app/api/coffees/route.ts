@@ -22,8 +22,9 @@ export async function GET(req: NextRequest){
       include:{
         coffeeShop: true,
       },
-      ...(limit ? { take: limit } : {}),
     });
+
+    console.log("coffees >>", coffees);
 
     const shuffled = coffees.sort(() => 0.5 - Math.random());
     const result = limit ? shuffled.slice(0, limit) : shuffled;
