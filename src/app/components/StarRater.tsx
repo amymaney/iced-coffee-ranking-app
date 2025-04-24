@@ -24,7 +24,7 @@ export default function StarRating({ name, value, onRatingChange }: StarRatingPr
                     type="button"
                     name={name}
                     className={`w-12 h-12 cursor-pointer ${
-                        star <= value ? "text-yellow-500 fill-yellow-500":"text-[#a98467]"
+                        star <= value ? "text-[#EFBB2C] fill-[#EFBB2C]":"text-[#a98467]"
                     }`}
                     strokeWidth={0.75}
                     onClick={()=>handleRating(star)}

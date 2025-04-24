@@ -1,11 +1,9 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import StarRating from "../../components/StarRater";
-import { SquareArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
-import { LogOut } from "lucide-react";
-import Head from "next/head";
+import Header from "@/app/components/Header";
 
 interface CoffeeData {
   name: string;
@@ -123,7 +121,6 @@ export default function NewIcedCoffee(){
       }
     };
      
-
     const handleChange = (e:React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => {
         const {name, value} = e.target;
         setCoffee((prev)=>({
@@ -194,39 +191,17 @@ export default function NewIcedCoffee(){
 
     return(
       <>
-         <Head>
-          <script
-            src={`https://maps.googleapis.com/maps/api/js?key=AIzaSyC2639TXrML796Unlkddbr78sas1uKRYpA&libraries=places`}
-            async
-          ></script>
-        </Head>
-        <div className="min-h-screen bg-[#a98467] relative flex flex-col">
-          <div className="flex justify-between items-center mt-4 ml-8 mr-10">
-            <div className="text-lg font-bold pr-4 pt-0.25 text-[#f0ead2]">
-              <SquareArrowLeft 
-                onClick={() => router.push("/")}
-                className="cursor-pointer w-8 h-8 text-[#f0ead2] mt-2" 
-              />
-            </div>
-
-            <div
-              className="flex flex-row text-[#f0ead2] cursor-pointer w"
-              onClick={() => signOut()} // Log out the user
-            >
-              <h2 className="text-lg font-bold pr-4 pt-0.25">sign out</h2>
-              <LogOut className="w-8 h-8" />
-            </div>
-          </div>
-        
-          <div className="w-full max-w-lg mx-auto p-10 bg-[#f0ead2] shadow-md mt-10 mb-20 rounded-xl">
-            <h1 className="text-2xl font-bold mb-4 text-center text-[#432818]">new iced coffee</h1>
+        <Header isLoggedIn={true} activePage="log-new" />
+        <div className="bg-[#f7edda] min-h-screen flex flex-col items-center">
+          <div className="w-full max-w-lg mx-auto p-8 bg-[#fffcf4] shadow-md mt-7 xl:mt-20 mb-10 rounded-3xl">
+            <h1 className="text-2xl text-[#6F4E37] font-roboto-mono font-bold mb-4 text-center">new iced coffee</h1>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-md font-medium font-semibold text-[#432818] mb-2">coffee name ☕</label>
+                <label className="block text-md font-medium font-semibold text-[#6F4E37] mb-2">coffee name ☕</label>
                 <input
                   type="text"
                   name="name"
-                  className="w-full p-2 rounded-xl bg-white placeholder:text-sm"
+                  className="w-full p-2 rounded-xl bg-white placeholder:text-sm border-1 border-[#6F4E37]"
                   placeholder="iced pistachio latte"
                   value={coffee.name}
                   onChange={handleChange}
@@ -234,18 +209,18 @@ export default function NewIcedCoffee(){
                 />
               </div>
               <div>
-                <label className="block text-md font-medium font-semibold text-[#432818] mb-2">shop name</label>
+                <label className="block text-md font-medium font-semibold text-[#6F4E37] mb-2">shop name</label>
                 <input
                   type="text"
                   name="shop"
-                  className="w-full p-2 bg-white rounded-xl placeholder:text-sm"
+                  className="w-full p-2 bg-white rounded-xl placeholder:text-sm border-1 border-[#6F4E37]"
                   placeholder="the big bean"
                   value={searchQuery}
                   onChange={(e)=>handleSearch(e.target.value)}
                   required
                 />
                 {(showDropdown&&searchQuery.length!==0 )&&(
-                  <ul className="bg-white rounded-xl mt-2 max-h-60 overflow-y-auto custom-scrollbar">
+                  <ul className="bg-white rounded-xl mt-2 max-h-60 overflow-y-auto custom-scrollbar border-1 border-[#6F4E37]">
                     {places.map((place)=>(
                       <li
                         key={`${place.place_id}-${place.name}`}
@@ -260,11 +235,11 @@ export default function NewIcedCoffee(){
                 )}
               </div>
               <div>
-                <label className="block text-md font-medium font-semibold text-[#432818] mb-2">price</label>
+                <label className="block text-md font-medium font-semibold text-[#6F4E37] mb-2">price</label>
                 <input
                   type="text"
                   name="price"
-                  className="w-full p-2 bg-white rounded-xl placeholder:text-sm"
+                  className="w-full p-2 bg-white rounded-xl placeholder:text-sm border-1 border-[#6F4E37]"
                   placeholder="4.99"
                   value={coffee.price}
                   onChange={handleChange}
@@ -272,7 +247,7 @@ export default function NewIcedCoffee(){
                 />
               </div>
               <div>
-                <label className="block text-md font-medium font-semibold text-[#432818] mb-2">rating</label>
+                <label className="block text-md font-medium font-semibold text-[#6F4E37] mb-2">rating</label>
                 <StarRating
                   name="star-rating"
                   value={coffee.rating}
@@ -281,10 +256,10 @@ export default function NewIcedCoffee(){
           
               </div>
               <div>
-                <label className="block text-md font-medium font-semibold text-[#432818] mb-2">review</label>
+                <label className="block text-md font-medium font-semibold text-[#6F4E37] mb-2">review</label>
                 <textarea
                   name="description"
-                  className="w-full p-2 bg-white rounded-xl placeholder:text-sm"
+                  className="w-full p-2 bg-white rounded-xl placeholder:text-sm border-1 border-[#6F4E37]"
                   placeholder="your thoughts on this iced coffee..."
                   value={coffee.description}
                   onChange={handleChange}
@@ -295,10 +270,11 @@ export default function NewIcedCoffee(){
                   {outcomeMsg}
                 </p>
               )}
-              <button type="submit" className="bg-[#adc178] text-[#432818] px-4 py-2 font-semibold rounded-xl w-full cursor-pointer">
+              <button type="submit" className="bg-[#DAE4F7] text-[#432818] px-4 py-2 font-semibold rounded-xl w-full cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-[1.02] border-1 border-[#6F4E37]">
                 submit
               </button>
             </form>
+
           </div>
         </div>
       </>

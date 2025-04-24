@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useSession, signOut, signIn } from "next-auth/react";
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
-import { MarkerMap } from "./components/Map";
+import Header from "./components/Header";
 
 type Coffee = {
   id: number;
@@ -100,46 +100,7 @@ const Page: React.FC = () => {
 
   return(
     <div>
-      <div className="flex justify-between bg-[#fffcf4] h-15">
-        <div className="flex items-center justify-between px-6 py-4 text-[#4c3730] w-2/3 pr-20">
-          <img 
-            alt="coffee bean"
-            src="/coffee-bean.png"
-            className="h-8 w-8"
-          />
-          <div className="">
-            <h3 
-              className="bg-[#f7edda] py-2 px-3 rounded-2xl cursor-pointer"
-            >
-              Home
-            </h3>
-          </div>
-          <h3 className="cursor-pointer py-2 px-3 hover:bg-[#f7edda] hover:rounded-2xl">Explore</h3>
-          {isLoggedIn&&(
-            <>
-              <h3 className="cursor-pointer py-2 px-3 hover:bg-[#f7edda] hover:rounded-2xl">Your coffees</h3>
-              <h3 onClick={() => router.push("/pages/newCoffee")} className="cursor-pointer py-2 px-3 hover:bg-[#f7edda] hover:rounded-2xl">Log new</h3>
-            </>
-          )}
-          {!isLoggedIn&&(
-            <>
-              <div className="w-65"></div>
-            </>
-          )}
-        </div>
-        <div className="px-6 py-3 items-center">
-          {isLoggedIn&&(
-            <h3 onClick={() => signOut()} className="cursor-pointer text-[#4c3730] py-2 px-3 hover:bg-[#f7edda] hover:rounded-2xl">
-              Sign out
-            </h3>
-          )}
-          {!isLoggedIn &&(
-            <h3 className="text-[#4c3730]">
-              You are not signed in
-            </h3>
-          )}
-        </div>
-      </div>
+      <Header isLoggedIn={isLoggedIn} activePage="home" />
       <div className="bg-[#f7edda] min-h-screen flex flex-col items-center pt-6">
         <div className="mb-8">
           <h1 className="text-[#6F4E37] text-center text-5xl font-roboto-mono pb-3">the bean map</h1>
@@ -187,7 +148,7 @@ const Page: React.FC = () => {
             {isLoggedIn&&(
               <>  
                 <h3 className="text-[#6F4E37] text-xl text-left">5⭐ coffee spotlight</h3>
-                <div className="w-full bg-[#FFFCF4] px-6 py-5 rounded-3xl mb-5 flex justify-between">
+                <div className="w-full bg-[#FFFCF4] shadow-md px-6 py-5 rounded-3xl mb-5 flex justify-between">
                   <div className="">
                     <h2 className="text-[#6F4E37] text-xl font-extrabold">{fiveStarCoffee?.name}</h2>
                     <h3 className="text-[#6F4E37] text-lg">{fiveStarCoffee?.coffeeShop?.name} - £{fiveStarCoffee?.price}</h3>

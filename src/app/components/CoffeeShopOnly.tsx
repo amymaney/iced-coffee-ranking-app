@@ -27,7 +27,7 @@ interface CoffeeShopProps {
       <div
         onMouseEnter={onHover}
         onMouseLeave={onLeave}
-         className="w-full bg-[#FFFCF4] px-6 py-5 rounded-3xl flex justify-between items-center transition-all duration-200 hover:shadow-lg hover:scale-[1.02] cursor-pointer"
+        className="w-full bg-[#FFFCF4] shadow-md px-6 py-5 rounded-3xl flex justify-between items-center transition-all duration-200 hover:shadow-lg hover:scale-[1.02] cursor-pointer"
       >
         <div>
           <h2 className="text-[#6F4E37] text-xl font-extrabold">{coffeeShop.name}</h2>
