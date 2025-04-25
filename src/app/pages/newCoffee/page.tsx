@@ -45,6 +45,8 @@ export default function NewIcedCoffee(){
     const [places, setPlaces] = useState<{name: string; place_id: string; formattedAddress: string}[]>([]);
     const [showDropdown, setShowDropdown] = useState<boolean>(false);
     const [outcomeMsg, setOutcomeMsg] = useState<string>("");
+    const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const [imageFile, setImageFile] = useState<File | null>(null);
     
     const handleSearch = async (query: string) => {
       setSearchQuery(query);
@@ -136,57 +138,97 @@ export default function NewIcedCoffee(){
       }));
     };
 
+    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if(file){
+        setImageFile(file);
+        setImagePreview(URL.createObjectURL(file));
+      }
+    };
+
     const handleSubmit = async (e: React.FormEvent)=> {
       e.preventDefault();
       console.log("coffee",coffee);
+      let uploadedImageUrl = "";
 
-      try{
-        const response = await fetch('/api/coffees', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(coffee),
-        });
+      let imageUploadStatus;
 
-        const data = await response.json();
-        if(response.ok){
-          console.log("Coffee added successfully", data);
-
-          setCoffee({
-            name:"",
-            price:"",
-            rating:0,
-            coffeeShopId:"",
-            description:"",
-            image:"",
-            location:"",
-            coffeeShopName:"",
-            lat:0,
-            lng:0
+      if (imageFile) {
+        const formData = new FormData();
+        formData.append("file", imageFile);
+    
+        try {
+          const uploadRes = await fetch("/api/upload", {
+            method: "POST",
+            body: formData,
           });
-
-          setPlaces([]);
-          setSearchQuery("");
-
+    
+          const uploadData = await uploadRes.json();
+          uploadedImageUrl = uploadData.url;
+          imageUploadStatus=true;
+        } catch (error) {
+          console.error("Image upload failed", error);
+          setOutcomeMsg("Image upload failed");
+          imageUploadStatus=false;
+          return; 
         }
-        else{
-          console.error("Error adding coffee:", data);
-          setOutcomeMsg("Error occurred please try again");
-        setTimeout(() => {
-          setOutcomeMsg(""); 
-        }, 4000);
-        }
-      } 
-      catch(error){
-        console.error("Error submitting coffee:", error);
-        setOutcomeMsg("Error occurred please try again");
-        setTimeout(() => {
-          setOutcomeMsg(""); 
-        }, 4000);
       }
 
-      router.push("/");
+      if((imageUploadStatus && imageFile)||!imageFile){
+        const coffeeData = {
+          ...coffee,
+          image: uploadedImageUrl,
+        };
+
+        try{
+          const response = await fetch('/api/coffees', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(coffeeData),
+          });
+
+          const data = await response.json();
+          if(response.ok){
+            console.log("Coffee added successfully", data);
+
+            setCoffee({
+              name:"",
+              price:"",
+              rating:0,
+              coffeeShopId:"",
+              description:"",
+              image:"",
+              location:"",
+              coffeeShopName:"",
+              lat:0,
+              lng:0
+            });
+
+            setPlaces([]);
+            setSearchQuery("");
+            setImagePreview(null);
+            setImageFile(null);
+          }
+          else{
+            console.error("Error adding coffee:", data);
+            setOutcomeMsg("Error occurred please try again");
+          setTimeout(() => {
+            setOutcomeMsg(""); 
+          }, 4000);
+          }
+        } 
+        catch(error){
+          console.error("Error submitting coffee:", error);
+          setOutcomeMsg("Error occurred please try again");
+          setTimeout(() => {
+            setOutcomeMsg(""); 
+          }, 4000);
+        }
+
+        router.push("/");
+      }
     };
 
     return(
@@ -266,6 +308,30 @@ export default function NewIcedCoffee(){
                   onChange={handleChange}
                 />
               </div>
+
+              <div className="mb-6">
+                <label className="block text-md font-medium font-semibold text-[#6F4E37] mb-2">upload a photo</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  className="block w-full text-sm text-[#966d50]
+                    file:mr-4 file:py-2 file:px-4
+                    file:rounded-full file:border-1 file:border-[#6F4E37]
+                    file:text-sm file:font-semibold
+                    file:bg-[#f7edda] file:text-[#4C3730]
+                    hover:file:shadow-md"
+                />
+              </div>
+
+              {imagePreview && (
+                <img 
+                  src={imagePreview} 
+                  alt="Preview" 
+                  className="mt-4 rounded-xl max-w-full h-[400px] lg:h-auto mx-auto"
+                />
+              )}
+
               {outcomeMsg!==""&&(
                 <p className=" mb-3 font-semibold text-[#656d4a] text-center">
                   {outcomeMsg}

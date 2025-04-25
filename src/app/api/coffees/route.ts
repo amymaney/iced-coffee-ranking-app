@@ -57,6 +57,8 @@ export async function GET(req: NextRequest){
     },
   });
 
+  console.log('data', user?.icedCoffees);
+
   return NextResponse.json(user?.icedCoffees || []);
 }
 

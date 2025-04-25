@@ -9,6 +9,7 @@ type Coffee = {
     price: number;
     rating: number;
     description: string;
+    image: string;
     coffeeShop: {
       name: string;
     };
@@ -59,13 +60,24 @@ export default function YourCoffees(){
           ) : (
             <div className="grid gap-1 w-full max-w-4xl px-4">
               {coffees.map((coffee)=>(
-                <div key={coffee.id} className="bg-[#FFFCF4] w-full mx-auto p-5 shadow-md mt-2 rounded-4xl mb-2">
+                <div key={coffee.id} className="bg-[#FFFCF4] flex flex-row justify-between w-full mx-auto p-5 shadow-md mt-2 rounded-4xl mb-2">
+                  <div>
                     <h2 className="text-lg font-semibold text-[#6F4E37]">{coffee.name}</h2>
                     <p className="text-sm text-gray-600">
                       {coffee.coffeeShop.name} — £{coffee.price.toFixed(2)}
                     </p>
                     <p className="mt-1 text-sm">Rating: {coffee.rating}/5</p>
                     <p className="mt-2 text-sm text-gray-700">{coffee.description}</p>
+                  </div>
+                  <div>
+                    {coffee.image!=="" && (
+                      <img
+                        src={coffee.image}
+                        alt="uploaded image"
+                        className="w-auto h-36 object-contain rounded-md shadow"
+                      />
+                    )}
+                  </div>
                 </div>
               ))}
             </div>
