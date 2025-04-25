@@ -80,7 +80,7 @@ export default function Explore(){
         <div>
             <Header isLoggedIn={isLoggedIn} activePage="explore" />
             <div className="bg-[#f7edda] min-h-screen w-full flex flex-col items-center pt-3">
-                <h3 className="text-[#6F4E37] self-end pr-6">{session?.email}</h3>
+                <h3 className="hidden sm:block text-[#6F4E37] self-end pr-6">{session?.email}</h3>
                 <h1 className="text-[#6F4E37] text-center text-4xl font-roboto-mono pb-3">explore</h1>
             </div>
         </div>

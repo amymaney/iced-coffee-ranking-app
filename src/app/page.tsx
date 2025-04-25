@@ -108,16 +108,16 @@ const Page: React.FC = () => {
     <div>
       <Header isLoggedIn={isLoggedIn} activePage="home" />
       <div className="bg-[#f7edda] min-h-screen flex flex-col items-center pt-3">
-        <h3 className="text-[#6F4E37] self-end pr-6">{session?.email}</h3>
+        <h3 className="hidden sm:block text-[#6F4E37] self-end pr-6">{session?.email}</h3>
         <div className="mb-8">
-          <h1 className="text-[#6F4E37] text-center text-5xl font-roboto-mono pb-3">the bean map</h1>
-          <h2 className="text-[#6F4E37] text-xl">for londoners who like their coffee on the rocks.</h2>
+          <h1 className="text-[#6F4E37] text-center text-5xl font-roboto-mono pb-3 pt-2">the bean map</h1>
+          <h2 className="text-[#6F4E37] text-lg lg:text-xl">for londoners who like their coffee on the rocks.</h2>
         </div>
-        <div className="flex justify-between w-full px-20 gap-x-8">
-          <div className="w-3/5">
-            <h3 className="text-[#6F4E37] text-xl text-left">top coffee shops</h3>
-            <div className="space-y-6 mt-4 mb-10">
-              {coffeeShops.map((coffeeShop) => (
+        <div className="flex flex-col lg:flex-row justify-between w-full px-4 lg:px-20 gap-3 lg:gap-8">
+          <div className="w-full lg:w-3/5">
+            <h3 className="text-[#6F4E37] text-lg lg:text-xl text-center lg:text-left">top coffee shops</h3>
+            <div className="lg:space-y-6 space-y-4  mt-4 lg:mb-10">
+              {coffeeShops?.map((coffeeShop) => (
                 <CoffeeShopCoffeeOnly 
                   key={coffeeShop.id} 
                   coffeeShop={coffeeShop} 
@@ -127,12 +127,14 @@ const Page: React.FC = () => {
               ))}
             </div>
           </div>
-          <div className="w-2/5 px-2 py-2 space-y-4 flex flex-col">
-            <div className="flex flex-row gap-5 w-full items-center">
+          <div className="w-full lg:w-2/5 px-2 py-2 space-y-4 flex flex-col">
+
+            {/* hidden on mobile */}
+            <div className="hidden sm:flex flex-row gap-5 w-full items-center">
               {!isLoggedIn&&(
                 <>
                   <button 
-                    onClick={()=>signIn("google")}
+                    onClick={() => signIn("google", { callbackUrl: process.env.NEXTAUTH_URL || "http://localhost:3000" })}
                     className="bg-[#FFFCF4] w-full px-3 py-3 rounded-3xl cursor-pointer text-center flex items-center justify-center
                       transition-all duration-200 hover:shadow-lg shadow-md">
                     <img
@@ -140,10 +142,10 @@ const Page: React.FC = () => {
                       alt="Google logo"
                       className="w-7 h-7 mr-5"
                     />
-                    <h3 className="text-[#4C3730] text-xl">Sign in with Google</h3>
+                    <h3 className="text-[#4C3730] text-lg lg:text-xl">Sign in with Google</h3>
                   </button>
                   <button 
-                    onClick={()=>signIn("microsoft")}
+                    onClick={() => signIn("microsoft", { callbackUrl: process.env.NEXTAUTH_URL || "http://localhost:3000" })}
                     className="bg-[#FFFCF4] w-full px-3 py-3 rounded-3xl cursor-pointer text-center flex items-center justify-center
                       transition-all duration-200 hover:shadow-lg shadow-md">
                     <img
@@ -151,18 +153,19 @@ const Page: React.FC = () => {
                       alt="Google logo"
                       className="w-6 h-6 mr-5"
                     />
-                    <h3 className="text-[#4C3730] text-xl">Sign in with Microsoft</h3>
+                    <h3 className="text-[#4C3730] text-lg lg:text-xl">Sign in with Microsoft</h3>
                   </button>
                 </>
               )}
             </div>
+            
             {isLoggedIn&&(
               <>  
-                <h3 className="text-[#6F4E37] text-xl text-left">5⭐ coffee spotlight</h3>
-                <div className="w-full bg-[#FFFCF4] shadow-md px-6 py-5 rounded-3xl mb-5 flex justify-between">
+                <h3 className="text-[#6F4E37] mt-2 lg:mt-0 text-lg lg:text-xl text-center lg:text-left">5⭐ coffee spotlight</h3>
+                <div className="w-full bg-[#FFFCF4] shadow-md lg:py-5 px-6 py-4 rounded-3xl mb-5 flex justify-between">
                   <div className="">
-                    <h2 className="text-[#6F4E37] text-xl font-extrabold">{fiveStarCoffee?.name}</h2>
-                    <h3 className="text-[#6F4E37] text-lg">{fiveStarCoffee?.coffeeShop?.name} - £{fiveStarCoffee?.price}</h3>
+                    <h2 className="text-[#6F4E37] text-lg lg:text-xl font-extrabold">{fiveStarCoffee?.name}</h2>
+                    <h3 className="text-[#6F4E37] text-md lg:text-lg">{fiveStarCoffee?.coffeeShop?.name} - £{fiveStarCoffee?.price}</h3>
                   </div>
                   <div className=" text-right">
                     <h2 className="text-md" style={{ color: "rgba(111, 78, 55, 0.75)" }}>{fiveStarCoffee?.description}</h2>

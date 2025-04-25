@@ -27,12 +27,12 @@ interface CoffeeShopProps {
       <div
         onMouseEnter={onHover}
         onMouseLeave={onLeave}
-        className="w-full bg-[#FFFCF4] shadow-md px-6 py-5 rounded-4xl flex justify-between items-center transition-all 
+        className="w-full bg-[#FFFCF4] shadow-md lg:py-5 px-6 py-4 rounded-4xl flex justify-between items-center transition-all 
           duration-200 hover:shadow-lg hover:scale-[1.02] cursor-pointer border border-transparent hover:border-[#6F4E37]"
       >
         <div>
-          <h2 className="text-[#6F4E37] text-xl font-extrabold">{coffeeShop.name}</h2>
-          <h3 className="text-[#6F4E37] text-lg">{coffeeShop.location}</h3>
+          <h2 className="text-[#6F4E37] lg:text-xl text-lg font-extrabold">{coffeeShop.name}</h2>
+          <h3 className="text-[#6F4E37] text-md lg:text-lg">{coffeeShop.location}</h3>
           <h3 className="text-md" style={{ color: "rgba(111, 78, 55, 0.75)" }}>
             {coffeeShop._count.icedCoffees} iced coffee
             {coffeeShop._count.icedCoffees !== 1 && "s"} logged
