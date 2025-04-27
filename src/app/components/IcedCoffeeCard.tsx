@@ -1,33 +1,39 @@
-// src/app/components/IcedCoffeeCard.tsx
 import React from "react";
 
-interface IcedCoffeeCardProps {
+export interface IcedCoffeeCardProps {
   id: number;
   name: string;
-  price: number;  
+  price: number;
   rating: number;
   description: string;
   image: string;
+  coffeeShop: {
+    name: string;
+  };
 }
 
-const IcedCoffeeCard: React.FC<IcedCoffeeCardProps> = ({
-  name,
-  price,
-  rating,
-  description,
-  image
-}) => {
-  const formattedPrice = `£${price.toFixed(2)}`;  
-
-  return (
-    <div className="bg-white p-4 rounded-lg shadow-md">
-      <div className="flex justify-between">
-        <h3 id="coffee-name" className="text-lg font-bold text-[#6c584c] text-left">{name}</h3>
-        <h3 id="coffee-rating" className="text-lg font-bold text-[#dbb42c] text-right pl-2">{rating}</h3>
+export default function IcedCoffeeCard({
+    name, price, rating, description, image, coffeeShop,
+  }: IcedCoffeeCardProps){
+    return(
+      <div className="bg-[#FFFCF4] flex flex-row justify-between w-full p-5 shadow-md rounded-4xl">
+        <div>
+          <h2 className="text-lg font-semibold text-[#6F4E37]">{name}</h2>
+          <p className="text-sm text-gray-600">
+            {coffeeShop.name} — £{price.toFixed(2)}
+          </p>
+          <p className="mt-1 text-sm">Rating: {rating}/5</p>
+          <p className="mt-2 text-sm text-gray-700">{description}</p>
+        </div>
+        <div>
+          {image && (
+            <img
+              src={image}
+              alt={`${name} image`}
+              className="h-36 object-contain rounded-lg shadow"
+            />
+          )}
+        </div>
       </div>
-      <p id="coffee-description" className="text-sm text-[#a98467]">{description}</p>
-    </div>
-  );
-};
-
-export default IcedCoffeeCard;
+    )
+  }

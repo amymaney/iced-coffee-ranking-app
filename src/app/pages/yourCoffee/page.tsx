@@ -2,17 +2,18 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import Header from "@/app/components/Header";
+import IcedCoffeeCard from "@/app/components/IcedCoffeeCard";
 
 type Coffee = {
-    id: number;
+  id: number;
+  name: string;
+  price: number;
+  rating: number;
+  description: string;
+  image: string;
+  coffeeShop: {
     name: string;
-    price: number;
-    rating: number;
-    description: string;
-    image: string;
-    coffeeShop: {
-      name: string;
-    };
+  };
 };
 
 export default function YourCoffees(){
@@ -54,31 +55,13 @@ export default function YourCoffees(){
       <div>
         <Header isLoggedIn={isLoggedIn} activePage="your-coffees" />
         <div className="bg-[#f7edda] min-h-screen w-full flex flex-col items-center pb-10">
-          <h1 className="text-2xl font-bold mb-4 text-center text-[#6F4E37] mt-8 font-roboto-mono">☕ my iced coffees</h1>
+          <h1 className="text-3xl font-bold mb-6 text-center text-[#6F4E37] mt-6 font-roboto-mono">☕ my iced coffees</h1>
           {coffees.length === 0 ? (
             <p className="text-[#6F4E37] text-center">You haven't added any iced coffees yet.</p>
           ) : (
-            <div className="grid gap-1 w-full max-w-4xl px-4">
-              {coffees.map((coffee)=>(
-                <div key={coffee.id} className="bg-[#FFFCF4] flex flex-row justify-between w-full mx-auto p-5 shadow-md mt-2 rounded-4xl mb-2">
-                  <div>
-                    <h2 className="text-lg font-semibold text-[#6F4E37]">{coffee.name}</h2>
-                    <p className="text-sm text-gray-600">
-                      {coffee.coffeeShop.name} — £{coffee.price.toFixed(2)}
-                    </p>
-                    <p className="mt-1 text-sm">Rating: {coffee.rating}/5</p>
-                    <p className="mt-2 text-sm text-gray-700">{coffee.description}</p>
-                  </div>
-                  <div>
-                    {coffee.image!=="" && (
-                      <img
-                        src={coffee.image}
-                        alt="uploaded image"
-                        className="w-auto h-36 object-contain rounded-md shadow"
-                      />
-                    )}
-                  </div>
-                </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl px-4 mx-auto">
+              {coffees.map((coffee) => (
+                <IcedCoffeeCard key={coffee.id} {...coffee} />
               ))}
             </div>
           )}

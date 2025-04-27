@@ -82,6 +82,16 @@ export default function Explore(){
             <div className="bg-[#f7edda] min-h-screen w-full flex flex-col items-center pt-3">
                 <h3 className="hidden sm:block text-[#6F4E37] self-end pr-6">{session?.email}</h3>
                 <h1 className="text-[#6F4E37] text-center text-4xl font-roboto-mono pb-3">explore</h1>
+                <div className="text-[#6F4E37] flex flex-row gap-5 items-center w-full">
+                    <div className="flex-1 flex justify-center items-center rounded-lg">
+                        <h2 className="text-lg">explore iced coffees</h2>
+                        
+                    </div>
+
+                    <div className="flex-1 flex justify-center items-center rounded-lg">
+                        <h2 className="text-lg">explore coffee shops</h2>
+                    </div>
+                </div>
             </div>
         </div>
     )

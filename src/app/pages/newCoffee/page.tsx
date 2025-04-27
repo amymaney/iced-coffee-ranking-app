@@ -236,7 +236,7 @@ export default function NewIcedCoffee(){
         <Header isLoggedIn={true} activePage="log-new" />
         <div className="bg-[#f7edda] min-h-screen flex flex-col items-center">
           <h3 className="hidden sm:block text-[#6F4E37] self-end pr-6 pt-3">{session?.email}</h3>
-          <div className="lg:w-full max-w-lg mx-auto p-8 bg-[#fffcf4] shadow-md mt-5 mb-10 rounded-3xl">
+          <div className="lg:w-full max-w-lg mx-auto p-8 bg-[#fffcf4] shadow-md mt-5 lg:mt-0 mb-10 rounded-3xl">
             <h1 className="text-2xl text-[#6F4E37] font-roboto-mono font-bold mb-4 text-center">new iced coffee</h1>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>

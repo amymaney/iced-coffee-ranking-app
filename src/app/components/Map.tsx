@@ -10,9 +10,21 @@ import {
 interface CoffeeShop {
   id: number;
   name: string;
+  rating: number;
   location: string;
+  icedCoffees: {
+    id: number;
+    name: string;
+    price: number;
+    rating: number;
+    description: string;
+    image: string;
+  }[];
   lat: number;
   lng: number;
+  _count: {
+    icedCoffees: number;
+  };
 }
 
 export type MarkerMap = Record<number, google.maps.marker.AdvancedMarkerElement>;
@@ -76,21 +88,31 @@ const Map = forwardRef(function Map({ coffeeShops, highlightedCoffee, onMarkersR
     loadGoogleMapsScript();
   }, []);
 
-  // Create map + markers
+  // Create map and markers
   useEffect(() => {
     if (!mapLoaded || !window.google || !mapRef.current) return;
 
+    // calculates average of all coffee shop lat and longs to find center
+    const latSum = coffeeShops.reduce((sum, shop) => sum + shop.lat, 0);
+    const lngSum = coffeeShops.reduce((sum, shop) => sum + shop.lng, 0);
+
+    const avgLat = latSum / coffeeShops.length;
+    const avgLng = lngSum / coffeeShops.length;
+
+    const center = { lat: avgLat, lng: avgLng };
+
     const map = new google.maps.Map(mapRef.current, {
-      center: { lat: 51.509865, lng: -0.118092 },
+      center: center,
       zoom: 12,
       mapId: "23d1afba9d0a35d",
     });
 
+    // stores all map markers by coffee shop id
     const markerMap: MarkerMap = {};
     const markerLib = (google.maps as any).marker;
     if (!markerLib?.AdvancedMarkerElement) return;
 
-
+    // loops through each coffee shop and creates coffee bean marker
     coffeeShops.forEach((shop) => {
       if (typeof shop.lat === "number" && typeof shop.lng === "number") {
         const markerDiv = document.createElement("div");
@@ -114,7 +136,7 @@ const Map = forwardRef(function Map({ coffeeShops, highlightedCoffee, onMarkersR
 
     onMarkersReady?.(markerMap);
 
-    // Add highlighted coffee marker (5⭐ coffee)
+    // Add star marker (5 star coffee)
     if (highlightedCoffee?.coffeeShop?.lat && highlightedCoffee?.coffeeShop?.lng) {
       const emojiDiv = document.createElement("div");
       emojiDiv.textContent = "⭐";
