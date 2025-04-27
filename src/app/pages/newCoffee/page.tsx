@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import StarRating from "../../components/StarRater";
+import StarRating from "../../components/StarRating";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import Header from "@/app/components/Header";
@@ -22,9 +22,10 @@ export default function NewIcedCoffee(){
   const router = useRouter();
     const { data: session, status } = useSession();
     useEffect(() => {
-      if (status === "loading") return; // If session is still loading, don't do anything.
+      if (status === "loading") return; 
       if (!session) {
-        router.push("/"); // Redirect to home page if the user is not logged in
+        // Redirect to home page if the user is not logged in
+        router.push("/"); 
       }
     }, [session, status, router]);
 
@@ -53,6 +54,7 @@ export default function NewIcedCoffee(){
       if(query.length<3) return;
       setShowDropdown(true);
 
+      // searches google places
       try{
         const response = await fetch(
           `https://places.googleapis.com/v1/places:searchText?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`,
@@ -104,7 +106,7 @@ export default function NewIcedCoffee(){
       setSearchQuery(place.name);
       setShowDropdown(false);
     
-      // Fetch latitude and longitude from your new API route
+      // Fetch latitude and longitude of selected place
       try {
         const response = await fetch(`/api/places?place_id=${place.place_id}`);
         const data = await response.json();
@@ -124,11 +126,11 @@ export default function NewIcedCoffee(){
     };
      
     const handleChange = (e:React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => {
-        const {name, value} = e.target;
-        setCoffee((prev)=>({
-            ...prev,
-            [name]: value,
-        }));
+      const {name, value} = e.target;
+      setCoffee((prev)=>({
+          ...prev,
+          [name]: value,
+      }));
     };
 
     const handleRatingChange = (newRating:number)=>{
@@ -235,9 +237,14 @@ export default function NewIcedCoffee(){
       <>
         <Header isLoggedIn={true} activePage="log-new" />
         <div className="bg-[#f7edda] min-h-screen flex flex-col items-center">
+
           <h3 className="hidden sm:block text-[#6F4E37] self-end pr-6 pt-3">{session?.email}</h3>
+
           <div className="lg:w-full max-w-lg mx-auto p-8 bg-[#fffcf4] shadow-md mt-5 lg:mt-0 mb-10 rounded-3xl">
+            
             <h1 className="text-2xl text-[#6F4E37] font-roboto-mono font-bold mb-4 text-center">new iced coffee</h1>
+
+            {/* new coffee form */}
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-md font-medium font-semibold text-[#6F4E37] mb-2">coffee name ☕</label>

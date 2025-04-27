@@ -22,6 +22,7 @@ export default function StarRating({ name, value, onRatingChange }: StarRatingPr
                     type="button"
                     onClick={() => handleRating(star)}
                     className="p-0 m-0 bg-transparent border-none cursor-pointer"
+                    aria-label={`Rate ${star} stars`}
                 >
                     <Star
                         className={`w-12 h-12 ${
