@@ -6,33 +6,44 @@ import { prisma } from "@/lib/prisma";
 export async function GET(req: NextRequest){
   const session = await getServerSession(authOptions);
   const url = new URL(req.url);
+
+  // parse query parameters
   const ratingParam = url.searchParams.get("rating");
   const noUser = url.searchParams.get("noUser");
   const limitParam = url.searchParams.get("limit");
+  const excludeShopIdsParam = url.searchParams.get("excludeShopIds");
+  console.log('excludedshopparm', excludeShopIdsParam);
 
   const rating = ratingParam ? parseInt(ratingParam):undefined;
   const limit = limitParam ? parseInt(limitParam) : undefined;
+
+  // create array of excluded shop id numbers
+  const excludeShopIds = excludeShopIdsParam
+    ? excludeShopIdsParam.split(",").map(id=>id.trim()).filter(id=>id.length>0)
+    : [];
 
   // For when no user specified
   if(noUser==="true"){
     const coffees = await prisma.icedCoffee.findMany({
       where:{
         ...(rating ? {rating}: {}),
+        ...(excludeShopIds.length > 0 ? {coffeeShopId: {notIn: excludeShopIds}} : {}),
       },
       include:{
         coffeeShop: true,
       },
     });
 
-    console.log("coffees >>", coffees);
+    // console.log("coffees >>", coffees);
 
+    // pick random
     const shuffled = coffees.sort(() => 0.5 - Math.random());
     const result = limit ? shuffled.slice(0, limit) : shuffled;
 
     return NextResponse.json(result);
   }
 
-  // find for specific user
+  // find for logged in user
   if(!session?.user?.email){
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
@@ -57,7 +68,7 @@ export async function GET(req: NextRequest){
     },
   });
 
-  console.log('data', user?.icedCoffees);
+  // console.log('coffees >>', user?.icedCoffees);
 
   return NextResponse.json(user?.icedCoffees || []);
 }

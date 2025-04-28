@@ -42,6 +42,7 @@ type Coffee = {
   rating: number;
   description: string;
   coffeeShop: {
+    id:number;
     name: string;
     coffeeShopId:string;
     lat: number;
@@ -134,15 +135,11 @@ const Map = forwardRef(function Map({ coffeeShops, highlightedCoffee, onMarkersR
       }
     });
 
-    onMarkersReady?.(markerMap);
-
     // Add star marker (5 star coffee)
     if (highlightedCoffee?.coffeeShop?.lat && highlightedCoffee?.coffeeShop?.lng) {
       const emojiDiv = document.createElement("div");
       emojiDiv.textContent = "⭐";
       emojiDiv.style.fontSize = "30px"; 
-      emojiDiv.style.transform = "translate(-50%, -50%)"; 
-      emojiDiv.style.position = "relative";
     
       const spotlightMarker = new markerLib.AdvancedMarkerElement({
         map,
@@ -153,10 +150,12 @@ const Map = forwardRef(function Map({ coffeeShops, highlightedCoffee, onMarkersR
         title: `⭐ ${highlightedCoffee.name}`,
         content: emojiDiv,
       });
-    }
-    
-  }, [coffeeShops, mapLoaded, onMarkersReady]);
 
+      markerMap[highlightedCoffee.coffeeShop.id] = spotlightMarker;
+    }
+
+    onMarkersReady?.(markerMap);
+  }, [coffeeShops, mapLoaded, onMarkersReady]);
 
   return (
     <div

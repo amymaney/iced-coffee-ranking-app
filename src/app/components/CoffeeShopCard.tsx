@@ -22,7 +22,7 @@ interface CoffeeShopProps {
     onLeave?: () => void;
   }
   
-  const CoffeeShopCoffeeOnly: React.FC<CoffeeShopProps> = ({ coffeeShop, onHover, onLeave }) => {
+  const CoffeeShopCard: React.FC<CoffeeShopProps> = ({ coffeeShop, onHover, onLeave }) => {
     return (
       <div
         onMouseEnter={onHover}
@@ -32,18 +32,18 @@ interface CoffeeShopProps {
       >
         <div>
           <h2 className="text-[#6F4E37] lg:text-xl text-lg font-extrabold">{coffeeShop.name}</h2>
-          <h3 className="text-[#6F4E37] text-md lg:text-lg">{coffeeShop.location}</h3>
-          <h3 className="text-md" style={{ color: "rgba(111, 78, 55, 0.75)" }}>
+          <p className="text-[#6F4E37] text-md lg:text-lg">{coffeeShop.location}</p>
+          <p className="text-md" style={{ color: "rgba(111, 78, 55, 0.75)" }}>
             {coffeeShop._count.icedCoffees} iced coffee
             {coffeeShop._count.icedCoffees !== 1 && "s"} logged
-          </h3>
+          </p>
         </div>
         <div>
-          <h2 className="text-right text-[#EFBB2C] text-4xl font-bold">{coffeeShop.rating.toFixed(2)}</h2>
+          <p className="text-right text-[#EFBB2C] text-4xl font-bold">{coffeeShop.rating.toFixed(2)}</p>
         </div>
       </div>
     );
   };
   
-export default CoffeeShopCoffeeOnly;
+export default CoffeeShopCard;
 

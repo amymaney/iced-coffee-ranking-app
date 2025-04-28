@@ -96,3 +96,30 @@ export default function Explore(){
         </div>
     )
 }
+
+// Planned features
+// Google map with markers for coffee shops - user can click marker to get pop up details 
+
+// Search bars:
+//     - search coffee shops by name 
+//     - search coffees by name
+//     - Filter list and zoom when searching
+
+// Filter and sort:
+//     - Filter:
+//          - By rating
+//          - By price range
+//          
+//     - Sort:
+//          - Highest to lowest rated and vice versa
+//          - Nearest to user location
+//          - Newest to oldest reviews and vice versa
+
+// Coffee reviews with user info, disply:
+//     - Coffee name, price, description, rating, image
+//     - The user who reviewed it
+//     - Datetime of review
+
+// Extras: dark mode? Skeleton loader? 
+
+

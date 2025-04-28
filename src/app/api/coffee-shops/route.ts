@@ -16,6 +16,7 @@ export async function GET(request: Request){
             },
             orderBy:{rating: 'desc'},
         });
+        console.log("coffee shops >>", coffeeShops);
         return NextResponse.json(coffeeShops);
     }
     catch(error){

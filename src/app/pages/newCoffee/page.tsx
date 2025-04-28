@@ -327,7 +327,7 @@ export default function NewIcedCoffee(){
                     file:rounded-full file:border-1 file:border-[#6F4E37]
                     file:text-sm file:font-semibold
                     file:bg-[#f7edda] file:text-[#4C3730]
-                    hover:file:shadow-md"
+                    hover:file:shadow-md cursor-pointer"
                 />
               </div>
 

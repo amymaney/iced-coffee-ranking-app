@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import CoffeeShopCoffeeOnly from "./components/CoffeeShopOnly";
+import CoffeeShopCard from "./components/CoffeeShopCard";
 import { useSession, signIn } from "next-auth/react";
 import dynamic from 'next/dynamic';
 import Header from "./components/Header";
@@ -23,6 +23,7 @@ type Coffee = {
 
 type CoffeeShop = {
   id: number;
+  coffeeShopId: string;
   name: string;
   rating: number;
   location: string;
@@ -55,44 +56,40 @@ const Page: React.FC = () => {
   const [coffeeShops, setCoffeeShops] = useState<CoffeeShop[]>([]);
   const [fiveStarCoffee, setFiveStarCoffee] = useState<Coffee>();
 
-  useEffect(()=>{
-
-    // Fetches top 4 rated coffee shops
-    const fetchCoffeeShops = async () => {
-      try{
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Fetch top 4 coffee shops
         const response = await fetch(`/api/coffee-shops?limit=4`);
-        if(!response.ok) throw new Error("Failed to fetch coffee shops");
-      
+        if (!response.ok) throw new Error("Failed to fetch coffee shops");
         const data = await response.json();
         setCoffeeShops(data);
-      }
-      catch(error){
-        console.error("Error loading coffee shops:", error);
-      }
-    };
-
-    // Gets a random 5 star coffee
-    const fetchFiveStarCoffee = async () => {
-      try{
-        const response = await fetch("/api/coffees?rating=5&noUser=true&limit=1");
-        if(!response.ok) throw new Error("Failed to fetch coffee");
-
-        const data = await response.json();
-        setFiveStarCoffee(data[0]);
-        console.log('5 star coffee', data);
-      }
-      catch(error){
-        console.log("Error loading coffee", error);
-      }
-      finally{
+  
+        let topCoffeeShops = '';
+        if (Array.isArray(data)) {
+          topCoffeeShops = data.map((coffeeShop: CoffeeShop) => coffeeShop.coffeeShopId).join(',');
+        } else {
+          console.error('Expected array but got:', data);
+        }
+  
+        // Fetch a 5 star coffee - exclude any from one of the top coffee shops already shown
+        console.log('topCoffeeShops:', topCoffeeShops);
+        const fiveStarResponse = await fetch(`/api/coffees?rating=5&noUser=true&limit=1&excludeShopIds=${topCoffeeShops}`);
+        if (!fiveStarResponse.ok) throw new Error("Failed to fetch coffee");
+        const fiveStarData = await fiveStarResponse.json();
+        setFiveStarCoffee(fiveStarData[0]);
+        console.log('5 star coffee:', fiveStarData);
+  
+      } catch (error) {
+        console.error("Error loading data:", error);
+      } finally {
         setLoading(false);
       }
     };
-
-    fetchCoffeeShops();
-    fetchFiveStarCoffee();
-
-  },[]);
+  
+    fetchData();
+  }, []);
+  
 
   // Mouse hover handlers to scale up/down the map markers
   const handleMouseEnter = (id: number) => {
@@ -139,7 +136,7 @@ const Page: React.FC = () => {
             <h3 className="text-[#6F4E37] text-lg lg:text-xl text-center lg:text-left">top coffee shops</h3>
             <div className="lg:space-y-6 space-y-4  mt-4 lg:mb-10">
               {coffeeShops?.map((coffeeShop) => (
-                <CoffeeShopCoffeeOnly 
+                <CoffeeShopCard
                   key={coffeeShop.id} 
                   coffeeShop={coffeeShop} 
                   onHover={() => handleMouseEnter(coffeeShop.id)}
