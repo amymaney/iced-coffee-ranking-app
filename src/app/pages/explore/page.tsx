@@ -1,7 +1,8 @@
 'use client';
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import Header from "@/app/components/Header";
+import dynamic from 'next/dynamic';
 
 type Coffee = {
     id: number;
@@ -23,9 +24,12 @@ type Coffee = {
 
 type CoffeeShop = {
     id: number;
+    coffeeShopId: string;
     name: string;
     location: string;
     rating: number;
+    lat:number;
+    lng: number;
     icedCoffees: {
       id: number;
       name: string;
@@ -39,12 +43,20 @@ type CoffeeShop = {
     };
 };
 
+// lazy loads map
+const Map = dynamic(()=> import('../../components/Map'), {ssr: false});
+
 export default function Explore(){
     const { data: session, status } = useSession();
     const [coffees, setCoffees] = useState<Coffee[]>([]);
     const [coffeeShops, setCoffeeShops] = useState<CoffeeShop[]>([]);
     const [loading, setLoading] = useState(true);
     const isLoggedIn = !!session;
+
+    // storing AdvancedMarkerElement objects for each coffee shop (Google maps custom markers)
+    const [markerMap, setMarkerMap] = useState<{ [id: number]: google.maps.marker.AdvancedMarkerElement }>({});
+    
+
 
     useEffect(()=> {
         const fetchCoffees = async () => {
@@ -82,7 +94,21 @@ export default function Explore(){
             <div className="bg-[#f7edda] min-h-screen w-full flex flex-col items-center pt-3">
                 <h3 className="hidden sm:block text-[#6F4E37] self-end pr-6">{session?.email}</h3>
                 <h1 className="text-[#6F4E37] text-center text-4xl font-roboto-mono pb-3">explore</h1>
-                <div className="text-[#6F4E37] flex flex-row gap-5 items-center w-full">
+                
+                <div className="w-full px-6">
+                    <div className="w-1/2 min-w-[300px] lg:h-900px">
+                        <Map 
+                            coffeeShops={coffeeShops} 
+                            onMarkersReady={setMarkerMap}
+                            isLoggedIn={isLoggedIn}
+                            className={`w-full rounded-3xl mt-1.5 mb-4 
+                                h-[600px] `}
+                        />
+                    </div>
+                </div>
+
+
+                {/* <div className="text-[#6F4E37] flex flex-row gap-5 items-center w-full">
                     <div className="flex-1 flex justify-center items-center rounded-lg">
                         <h2 className="text-lg">explore iced coffees</h2>
                         
@@ -91,7 +117,7 @@ export default function Explore(){
                     <div className="flex-1 flex justify-center items-center rounded-lg">
                         <h2 className="text-lg">explore coffee shops</h2>
                     </div>
-                </div>
+                </div> */}
             </div>
         </div>
     )

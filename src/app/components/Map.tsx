@@ -33,6 +33,7 @@ interface MapProps {
   coffeeShops: CoffeeShop[];
   onMarkersReady?: (markerMap: MarkerMap) => void;
   isLoggedIn: boolean;
+  className: string;
 }
 
 type Coffee = {
@@ -56,7 +57,7 @@ interface MapProps {
   onMarkersReady?: (markerMap: MarkerMap) => void;
 }
 
-const Map = forwardRef(function Map({ coffeeShops, highlightedCoffee, onMarkersReady, isLoggedIn }: MapProps, ref) {
+const Map = forwardRef(function Map({ coffeeShops, highlightedCoffee, onMarkersReady, className }: MapProps, ref) {
   const mapRef = useRef<HTMLDivElement>(null);
   const [mapLoaded, setMapLoaded] = useState(false);
 
@@ -157,12 +158,17 @@ const Map = forwardRef(function Map({ coffeeShops, highlightedCoffee, onMarkersR
     onMarkersReady?.(markerMap);
   }, [coffeeShops, mapLoaded, onMarkersReady]);
 
+  const getMapHeight = () => {
+
+  };
+
   return (
     <div
       ref={mapRef}
-      className={`w-full rounded-3xl mt-1.5 mb-4 
-        ${isLoggedIn ? 'h-[412px]' : 'h-[510px]'} 
-      `}      
+      className={className}
+      // className={`w-full rounded-3xl mt-1.5 mb-4 
+      //   ${isLoggedIn ? 'h-[412px]' : 'h-[510px]'} 
+      // `}      
     />
   );
 });

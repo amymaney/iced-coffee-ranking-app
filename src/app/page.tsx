@@ -45,7 +45,7 @@ type CoffeeShop = {
 // lazy loads map
 const Map = dynamic(()=> import('./components/Map'), {ssr: false})
 
-const Page: React.FC = () => {
+export default function HomePage(){
   const { data: session, status } = useSession();
 
   // storing AdvancedMarkerElement objects for each coffee shop (Google maps custom markers)
@@ -78,7 +78,7 @@ const Page: React.FC = () => {
         if (!fiveStarResponse.ok) throw new Error("Failed to fetch coffee");
         const fiveStarData = await fiveStarResponse.json();
         setFiveStarCoffee(fiveStarData[0]);
-        console.log('5 star coffee:', fiveStarData);
+        // console.log('5 star coffee:', fiveStarData);
   
       } catch (error) {
         console.error("Error loading data:", error);
@@ -213,6 +213,9 @@ const Page: React.FC = () => {
               onMarkersReady={setMarkerMap} 
               highlightedCoffee={fiveStarCoffee}
               isLoggedIn={isLoggedIn}
+              className={`w-full rounded-3xl mt-1.5 mb-4 
+                ${isLoggedIn ? 'h-[412px]' : 'h-[510px]'} 
+              `}
             />
 
           </div>
@@ -224,4 +227,3 @@ const Page: React.FC = () => {
 
 };
 
-export default Page;
