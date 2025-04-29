@@ -113,10 +113,10 @@ export default function Explore(){
                         />
                     </div>
                     <div className="w-1/4">
-                        
+                        {/* filter */}
                     </div>
                     <div className="w-1/4">
-                    
+                        {/* sort */}
                     </div>
                 </div>
 
