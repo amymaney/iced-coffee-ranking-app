@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import Header from "@/app/components/Header";
 
-interface CoffeeData {
+type CoffeeFormState = {
   name: string;
   price: string;
   rating: number;
@@ -16,7 +16,8 @@ interface CoffeeData {
   coffeeShopName: string;
   lat: number;
   lng: number;
-}
+};
+
 
 export default function NewIcedCoffee(){
   const router = useRouter();
@@ -29,7 +30,7 @@ export default function NewIcedCoffee(){
       }
     }, [session, status, router]);
 
-    const [coffee, setCoffee] = useState<CoffeeData>({
+    const [coffee, setCoffee] = useState<CoffeeFormState>({
       name: "",
       price: "",
       rating: 0,

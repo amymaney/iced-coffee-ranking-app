@@ -5,42 +5,7 @@ import CoffeeShopCard from "./components/CoffeeShopCard";
 import { useSession, signIn } from "next-auth/react";
 import dynamic from 'next/dynamic';
 import Header from "./components/Header";
-
-type Coffee = {
-  id: number;
-  name: string;
-  price: number;
-  rating: number;
-  description: string;
-  coffeeShop: {
-    id: number;
-    name: string;
-    coffeeShopId:string;
-    lat: number;
-    lng: number;
-  };
-};
-
-type CoffeeShop = {
-  id: number;
-  coffeeShopId: string;
-  name: string;
-  rating: number;
-  location: string;
-  lat: number;
-  lng: number;
-  icedCoffees: {
-    id: number;
-    name: string;
-    price: number;
-    rating: number;
-    description: string;
-    image: string;
-  }[];
-  _count: {
-    icedCoffees: number;
-  };
-};
+import type { CoffeeShop, Coffee } from "./types";
 
 // lazy loads map
 const Map = dynamic(()=> import('./components/Map'), {ssr: false})

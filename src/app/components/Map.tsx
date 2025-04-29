@@ -1,31 +1,9 @@
 "use client";
 
-import {
-  useEffect,
-  useRef,
-  useState,
-  forwardRef,
-} from "react";
-
-interface CoffeeShop {
-  id: number;
-  name: string;
-  rating: number;
-  location: string;
-  icedCoffees: {
-    id: number;
-    name: string;
-    price: number;
-    rating: number;
-    description: string;
-    image: string;
-  }[];
-  lat: number;
-  lng: number;
-  _count: {
-    icedCoffees: number;
-  };
-}
+import { useEffect, useRef, useState, forwardRef,} from "react";
+import { renderToString } from "react-dom/server";
+import type { CoffeeShop } from "../types";
+import { MapPopupCard } from "./MapPopupCard";
 
 export type MarkerMap = Record<number, google.maps.marker.AdvancedMarkerElement>;
 
@@ -117,14 +95,16 @@ const Map = forwardRef(function Map({ coffeeShops, highlightedCoffee, onMarkersR
     // loops through each coffee shop and creates coffee bean marker
     coffeeShops.forEach((shop) => {
       if (typeof shop.lat === "number" && typeof shop.lng === "number") {
+
+        // Marker content
         const markerDiv = document.createElement("div");
         const img = document.createElement("img");
         img.src = "/coffee-bean.png";
         img.style.width = "25px";
         img.style.height = "25px";
-
         markerDiv.appendChild(img);
 
+        // Creates and places marker
         const marker = new markerLib.AdvancedMarkerElement({
           map,
           position: { lat: shop.lat, lng: shop.lng },
@@ -133,6 +113,15 @@ const Map = forwardRef(function Map({ coffeeShops, highlightedCoffee, onMarkersR
         });
 
         markerMap[shop.id] = marker;
+
+        // creates pop up card with a click listener
+        const infoWindow = new google.maps.InfoWindow({
+          content: renderToString(<MapPopupCard shop={shop} />),
+        });
+
+        marker.addListener("click", ()=>{
+          infoWindow.open(map, marker);
+        })
       }
     });
 
@@ -158,17 +147,10 @@ const Map = forwardRef(function Map({ coffeeShops, highlightedCoffee, onMarkersR
     onMarkersReady?.(markerMap);
   }, [coffeeShops, mapLoaded, onMarkersReady]);
 
-  const getMapHeight = () => {
-
-  };
-
   return (
     <div
       ref={mapRef}
-      className={className}
-      // className={`w-full rounded-3xl mt-1.5 mb-4 
-      //   ${isLoggedIn ? 'h-[412px]' : 'h-[510px]'} 
-      // `}      
+      className={className}   
     />
   );
 });

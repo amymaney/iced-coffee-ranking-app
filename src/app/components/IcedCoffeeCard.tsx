@@ -10,27 +10,37 @@ export interface IcedCoffeeCardProps {
   coffeeShop: {
     name: string;
   };
+  onHover?: () => void;
+  onLeave?: () => void;
 }
 
 export default function IcedCoffeeCard({
-    name, price, rating, description, image, coffeeShop,
+    name, price, rating, description, image, coffeeShop, onHover, onLeave,
   }: IcedCoffeeCardProps){
     return(
-      <div className="bg-[#FFFCF4] flex flex-row justify-between w-full p-5 shadow-md rounded-4xl">
+      <div 
+        onMouseEnter={onHover}
+        onMouseLeave={onLeave}
+        className={`bg-[#FFFCF4] flex flex-col sm:flex-row justify-between w-full px-7 py-5 shadow-md 
+        rounded-4xl transition-all duration-200 hover:shadow-lg hover:scale-[1.02] cursor-pointer
+        border border-transparent hover:border-[#6F4E37] gap-3 ${image ? 'max-h-100' : 'max-h-50'}`}
+      >
         <div>
           <h2 className="text-lg font-semibold text-[#6F4E37]">{name}</h2>
           <p className="text-sm text-gray-600">
             {coffeeShop.name} — £{price.toFixed(2)}
           </p>
           <p className="mt-1 text-sm">Rating: {rating}/5</p>
-          <p className="mt-2 text-sm text-gray-700">{description}</p>
+          {description&&(
+            <p className="mt-2 text-sm text-gray-700">{description}</p>
+          )}
         </div>
         <div>
           {image && (
             <img
               src={image}
               alt={`${name} image`}
-              className="h-36 object-contain rounded-lg shadow"
+              className="max-h-40 object-contain rounded-lg shadow"
             />
           )}
         </div>

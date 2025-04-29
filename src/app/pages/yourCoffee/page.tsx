@@ -3,18 +3,7 @@ import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import Header from "@/app/components/Header";
 import IcedCoffeeCard from "@/app/components/IcedCoffeeCard";
-
-type Coffee = {
-  id: number;
-  name: string;
-  price: number;
-  rating: number;
-  description: string;
-  image: string;
-  coffeeShop: {
-    name: string;
-  };
-};
+import type {Coffee} from "../../types";
 
 export default function YourCoffees(){
     const { data: session, status } = useSession();
