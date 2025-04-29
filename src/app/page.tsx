@@ -6,6 +6,7 @@ import { useSession, signIn } from "next-auth/react";
 import dynamic from 'next/dynamic';
 import Header from "./components/Header";
 import type { CoffeeShop, Coffee } from "./types";
+import SkeletonHomePage from "./components/SkeletonHomePage";
 
 // lazy loads map
 const Map = dynamic(()=> import('./components/Map'), {ssr: false})
@@ -73,8 +74,8 @@ export default function HomePage(){
   
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-[#fffcf4]">
-        <div className="loader">Loading...</div>
+      <div>
+        <SkeletonHomePage />
       </div>
     );
   }
