@@ -37,6 +37,8 @@ export type Coffee = {
     };
     userId: string;
     user:{
-        name: string;
+      name: string;
+      email: string;
+      username: string;
     };
 }

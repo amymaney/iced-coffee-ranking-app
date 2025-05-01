@@ -90,9 +90,9 @@ export default function Explore(){
     return(
         <div>
             <Header isLoggedIn={isLoggedIn} activePage="explore" />
-            <div className="bg-[#f7edda] min-h-screen w-full flex flex-col sm:pt-3 pt-1">
-                <div className="pb-3 flex flex-row justify-between px-10">
-                    <h1 className="hidden sm:block text-[#6F4E37] sm:text-left text-4xl font-roboto-mono mt-2">
+            <div className="bg-[#f7edda] w-full flex flex-col sm:pt-3 pt-1">
+                <div className={`pb-3 px-10 ${!isLoggedIn ? "justify-center" : "flex flex-row justify-between"}`}>
+                    <h1 className={`hidden sm:block text-[#6F4E37] ${isLoggedIn ? "sm:text-left " : "text-center"} text-4xl font-roboto-mono mt-2`}>
                         explore coffees
                     </h1>
                     <div>
@@ -131,7 +131,7 @@ export default function Explore(){
                                 sm:h-[650px] h-[275px]`}
                         />
                     </div>
-                    <div className="w-full sm:w-1/2 h-[650px] grid grid-cols-1 lg:grid-cols-2 gap-5 
+                    <div className="w-full sm:w-1/2 sm:h-[650px] h-[350px] grid grid-cols-1 lg:grid-cols-2 gap-5 
                         p-2 overflow-y-auto"
                         onScroll={handleScroll}
                     >

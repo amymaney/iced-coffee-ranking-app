@@ -1,7 +1,8 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { prisma } from "@/lib/prisma"; // Your Prisma client
+import { prisma } from "@/lib/prisma"; 
+import { generateUsername } from "@/utils/generateUsername";
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -54,14 +55,13 @@ export const authOptions: NextAuthOptions = {
     async signIn({ account, profile }) {
       try {
         if (account?.provider === "microsoft" || account?.provider === "google") {
-          // Use `findFirst` to query by provider and providerAccountId
           const existingAccount = await prisma.account.findFirst({
             where: {
               provider: account.provider,
               providerAccountId: account.providerAccountId,
             },
             include: {
-              user: true, // Include user to retrieve associated user data
+              user: true, // retrieves associated user data
             },
           });
     
@@ -69,14 +69,16 @@ export const authOptions: NextAuthOptions = {
             // Return true if account exists
             return true;
           } else {
-            // Optionally, create a new user if the account is not found
+            // create a new user if the account is not found
             if (!profile?.email) {
               throw new Error("Email is required to create a new user.");
             }
+            const newUsername = generateUsername();
             const newUser = await prisma.user.create({
               data: {
                 email: profile?.email ?? "default@example.com",
                 name: profile?.name,
+                username: newUsername,
                 accounts: {
                   create: [
                     {
@@ -88,13 +90,13 @@ export const authOptions: NextAuthOptions = {
                 },
               },
             });
-            return true; // Proceed with sign-in
+            return true; 
           }
         }
-        return true; // Proceed with sign-in for other providers
+        return true; 
       } catch (error) {
         console.error("Error during signIn callback:", error);
-        return false; // Return false if there's an error
+        return false; 
       }
     }
     

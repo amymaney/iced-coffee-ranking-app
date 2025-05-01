@@ -31,10 +31,11 @@ export async function GET(req: NextRequest){
       },
       include:{
         coffeeShop: true,
+        user: true
       },
     });
 
-    // console.log("coffees >>", coffees);
+    console.log("coffees >>", coffees);
 
     // pick random
     const shuffled = coffees.sort(() => 0.5 - Math.random());
