@@ -2,37 +2,17 @@
 
 import { useEffect, useRef, useState, forwardRef,} from "react";
 import { renderToString } from "react-dom/server";
-import type { CoffeeShop } from "../types";
-import { MapPopupCard } from "./MapPopupCard";
+import type { CoffeeShop, Coffee } from "../types";
+import MapPopupCard from "./MapPopupCard";
 
 export type MarkerMap = Record<number, google.maps.marker.AdvancedMarkerElement>;
 
 interface MapProps {
   coffeeShops: CoffeeShop[];
+  highlightedCoffee?: Coffee | null;
   onMarkersReady?: (markerMap: MarkerMap) => void;
   isLoggedIn: boolean;
   className: string;
-}
-
-type Coffee = {
-  id: number;
-  name: string;
-  price: number;
-  rating: number;
-  description: string;
-  coffeeShop: {
-    id:number;
-    name: string;
-    coffeeShopId:string;
-    lat: number;
-    lng: number;
-  };
-};
-
-interface MapProps {
-  coffeeShops: CoffeeShop[];
-  highlightedCoffee?: Coffee | null;
-  onMarkersReady?: (markerMap: MarkerMap) => void;
 }
 
 const Map = forwardRef(function Map({ coffeeShops, highlightedCoffee, onMarkersReady, className }: MapProps, ref) {
@@ -44,23 +24,28 @@ const Map = forwardRef(function Map({ coffeeShops, highlightedCoffee, onMarkersR
     const loadGoogleMapsScript = () => {
       if (typeof window === "undefined") return;
 
+      // checks if Google Maps API is loaded yet
       if (!window.google) {
         const existingScript = document.querySelector(
           'script[src^="https://maps.googleapis.com/maps/api/js"]'
         );
 
         if (!existingScript) {
+          // loads the google maps api script (with the places and marker libraries)
           const script = document.createElement("script");
           script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places,marker`;
-          script.async = true;
+          script.async = true; 
           script.defer = true;
           script.onload = () => setMapLoaded(true);
-          script.setAttribute("data-loaded", "true");
-          document.head.appendChild(script);
-        } else {
+          script.setAttribute("data-loaded", "true"); // keeps track script has been loaded
+          document.head.appendChild(script); 
+        } 
+        else {
+          // set map as loaded when script finishes loading
           existingScript.addEventListener("load", () => setMapLoaded(true));
         }
-      } else {
+      } 
+      else {
         setMapLoaded(true);
       }
     };
@@ -68,7 +53,7 @@ const Map = forwardRef(function Map({ coffeeShops, highlightedCoffee, onMarkersR
     loadGoogleMapsScript();
   }, []);
 
-  // Create map and markers
+  // Create map and custom markers
   useEffect(() => {
     if (!mapLoaded || !window.google || !mapRef.current) return;
 
@@ -89,6 +74,8 @@ const Map = forwardRef(function Map({ coffeeShops, highlightedCoffee, onMarkersR
 
     // stores all map markers by coffee shop id
     const markerMap: MarkerMap = {};
+
+    // accesses google maps marker library
     const markerLib = (google.maps as any).marker;
     if (!markerLib?.AdvancedMarkerElement) return;
 
@@ -107,21 +94,24 @@ const Map = forwardRef(function Map({ coffeeShops, highlightedCoffee, onMarkersR
         // Creates and places marker
         const marker = new markerLib.AdvancedMarkerElement({
           map,
-          position: { lat: shop.lat, lng: shop.lng },
+          position: { 
+            lat: shop.lat, 
+            lng: shop.lng 
+          },
           title: shop.name,
           content: markerDiv,
         });
 
         markerMap[shop.id] = marker;
 
-        // creates pop up card with a click listener
+        // creates pop up card with a click listener (opens info window)
         const infoWindow = new google.maps.InfoWindow({
           content: renderToString(<MapPopupCard shop={shop} />),
         });
 
         marker.addListener("gmp-click", ()=>{
           infoWindow.open(map, marker);
-        })
+        });
       }
     });
 
@@ -142,6 +132,14 @@ const Map = forwardRef(function Map({ coffeeShops, highlightedCoffee, onMarkersR
       });
 
       markerMap[highlightedCoffee.coffeeShop.id] = spotlightMarker;
+
+      const infoWindow = new google.maps.InfoWindow({
+        content: renderToString(<MapPopupCard shop={highlightedCoffee.coffeeShop} />),
+      });
+
+      spotlightMarker.addListener("gmp-click", ()=>{
+        infoWindow.open(map, spotlightMarker);
+      });
     }
 
     onMarkersReady?.(markerMap);

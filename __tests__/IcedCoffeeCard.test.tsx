@@ -10,6 +10,11 @@ const mockIcedCoffee = {
     image:"https://res.cloudinary.com/de59m0cso/image/upload/v1745620150/vb7lbeuml7an9ljegpif.jpg",
     coffeeShop:{
         name: "Coffee & Friends"
+    },
+    user:{
+        email:"randomemail@gmail.com",
+        name:"Test user",
+        username:"coffee-gal-89"
     }
 };
 

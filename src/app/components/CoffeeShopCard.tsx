@@ -22,7 +22,7 @@ interface CoffeeShopProps {
     onLeave?: () => void;
   }
   
-  const CoffeeShopCard: React.FC<CoffeeShopProps> = ({ coffeeShop, onHover, onLeave }) => {
+  export default function CoffeeShopCard({coffeeShop, onHover, onLeave}: CoffeeShopProps){
     return (
       <div
         onMouseEnter={onHover}
@@ -45,5 +45,4 @@ interface CoffeeShopProps {
     );
   };
   
-export default CoffeeShopCard;
 

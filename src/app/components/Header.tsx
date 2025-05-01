@@ -25,6 +25,7 @@ export default function Header({isLoggedIn, activePage}: HeaderProps){
     
     return(
         <div className="bg-[#fffcf4]">
+
             {/* Desktop header */}
             <div className="hidden lg:flex justify-between items-center px-6 py-4 text-[#4c3730]">
                 <div className="flex items-center gap-10">
@@ -99,7 +100,7 @@ export default function Header({isLoggedIn, activePage}: HeaderProps){
                 </button>
             </div>
 
-            {/* Mobile menu */}
+            {/* Mobile menu (hamburger menu) */}
             {menuOpen && (
                 <div className={`lg:hidden text-[#4c3730] ${isLoggedIn ? 'bg-[#fffcf4]' : 'bg-[#f7edda]'} px-7 py-4 space-y-4`}>
                     {isLoggedIn && (

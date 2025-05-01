@@ -34,6 +34,18 @@ export type Coffee = {
       lat: number;
       lng: number;
       location: string;
+      rating: number;
+      icedCoffees:{
+        id: number;
+        name: string;
+        price: number;
+        rating: number;
+        description: string;
+        image: string;
+      }[];
+      _count:{
+        icedCoffees:number;
+      }
     };
     userId: string;
     user:{

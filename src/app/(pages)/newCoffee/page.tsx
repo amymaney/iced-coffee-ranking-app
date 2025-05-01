@@ -25,8 +25,8 @@ export default function NewIcedCoffee(){
     const { data: session, status } = useSession();
     useEffect(() => {
       if (status === "loading") return; 
+
       if (!session) {
-        // Redirect to home page if the user is not logged in
         router.push("/"); 
       }
     }, [session, status, router]);
@@ -72,7 +72,7 @@ export default function NewIcedCoffee(){
               locationBias: {
                 circle: {
                   center: {
-                    // Restrict to London
+                    // Centers on London
                     latitude: 51.5074,
                     longitude: -0.1278,
                   },

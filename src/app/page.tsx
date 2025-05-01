@@ -8,7 +8,7 @@ import Header from "./components/Header";
 import type { CoffeeShop, Coffee } from "./types";
 import SkeletonHomePage from "./components/SkeletonHomePage";
 
-// lazy loads map
+// lazy loads map (only client-side)
 const Map = dynamic(()=> import('./components/Map'), {ssr: false})
 
 export default function HomePage(){

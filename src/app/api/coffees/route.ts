@@ -88,64 +88,64 @@ export async function POST(request: Request) {
       const priceFloat = parseFloat(price);
 
       if (isNaN(priceFloat)) {
-          return NextResponse.json(
-            { error: 'Price must be a valid number' },
-            { status: 400 }
-          );
-      }
+        return NextResponse.json(
+          { error: 'Price must be a valid number' },
+          { status: 400 }
+        );
+    }
 
       if(!name||!price||!rating||!coffeeShopId||!location||!coffeeShopName||lat==undefined||lng===undefined){
-          console.error("Missing fields");
-          return NextResponse.json(
-              {error:'Missing required fields'},
-              {status: 400}
-          );
+        console.error("Missing fields");
+        return NextResponse.json(
+            {error:'Missing required fields'},
+            {status: 400}
+        );
       }
 
       // Check if the coffee shop exists
       let coffeeShop = await prisma.coffeeShop.findUnique({
-          where: { coffeeShopId },
+        where: { coffeeShopId },
       });
 
       if(!coffeeShop){
-          const newCoffeeShop = await prisma.coffeeShop.create({
-              data:{
-                  coffeeShopId,
-                  name: coffeeShopName,
-                  location,
-                  lat,
-                  lng,
-                  rating:rating,
-                  image:""
-              }
-          });
+        const newCoffeeShop = await prisma.coffeeShop.create({
+          data:{
+            coffeeShopId,
+            name: coffeeShopName,
+            location,
+            lat,
+            lng,
+            rating:rating,
+            image:""
+          }
+        });
 
-          console.log('New coffee created:', newCoffeeShop);
+        console.log('New coffee created:', newCoffeeShop);
       }
       else{
-          console.log('Coffee shop already exists');
+        console.log('Coffee shop already exists');
       }
 
       const newCoffee = await prisma.icedCoffee.create({
-          data:{
-              name,
-              price:priceFloat,
-              rating,
-              coffeeShopId,
-              description,
-              image,
-              userId: session.id
-          }
+        data:{
+          name,
+          price:priceFloat,
+          rating,
+          coffeeShopId,
+          description,
+          image,
+          userId: session.id
+        }
       });
 
       const updatedRating = await prisma.icedCoffee.aggregate({
-          where: { coffeeShopId },
-          _avg: {rating: true},
+        where: { coffeeShopId },
+        _avg: {rating: true},
       });
 
       await prisma.coffeeShop.update({
-          where: { coffeeShopId },
-          data: {rating: updatedRating._avg.rating ?? 0},
+        where: { coffeeShopId },
+        data: {rating: updatedRating._avg.rating ?? 0},
       });
 
       console.log('New coffee created:', newCoffee);
@@ -153,10 +153,10 @@ export async function POST(request: Request) {
       return NextResponse.json(newCoffee, {status: 201});
   }
   catch(error){
-      console.error('Error adding new iced coffee:', error);
-      return NextResponse.json(
-          {error: 'Failed to add iced coffee'},
-          {status: 500}
-      );
+    console.error('Error adding new iced coffee:', error);
+    return NextResponse.json(
+      {error: 'Failed to add iced coffee'},
+      {status: 500}
+    );
   }
 }
