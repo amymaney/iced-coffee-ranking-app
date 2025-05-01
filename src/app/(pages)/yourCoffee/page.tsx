@@ -76,7 +76,7 @@ export default function YourCoffees(){
                 overflow-y-auto h-[650px] p-2 w-[90%]">
               {visibleCoffees.length > 0 ? (
                 visibleCoffees.map((coffee)=>(
-                  <IcedCoffeeCard key={coffee.id} {...coffee} layout="image-side"/>
+                  <IcedCoffeeCard key={coffee.id} {...coffee}/>
                 ))
               ) : (
                 <p className="text-center col-span-full">No results found</p> 
