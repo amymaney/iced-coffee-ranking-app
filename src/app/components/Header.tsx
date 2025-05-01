@@ -32,18 +32,18 @@ export default function Header({isLoggedIn, activePage}: HeaderProps){
                     <h3 onClick={() => router.push("/")} className={linkClass("home")}>
                         Home
                     </h3>
-                    <h3 onClick={() => router.push("/pages/explore")} className={linkClass("explore")}>
+                    <h3 onClick={() => router.push("/explore")} className={linkClass("explore")}>
                         Explore
                     </h3>
                     {isLoggedIn && (
                         <>
-                        <h3 onClick={() => router.push("/pages/yourCoffee")} className={linkClass("your-coffees")}>
-                            Your coffees
+                        <h3 onClick={() => router.push("/yourCoffee")} className={linkClass("your-coffees")}>
+                            My coffees
                         </h3>
-                        <h3 onClick={() => router.push("/pages/newCoffee")} className={linkClass("log-new")}>
+                        <h3 onClick={() => router.push("/newCoffee")} className={linkClass("log-new")}>
                             Log new
                         </h3>
-                        <h3 onClick={() => router.push("/pages/myProfile")} className={linkClass("my-profile")}>
+                        <h3 onClick={() => router.push("/myProfile")} className={linkClass("my-profile")}>
                             My profile
                         </h3>
                         </>
@@ -67,7 +67,7 @@ export default function Header({isLoggedIn, activePage}: HeaderProps){
                     <h3 onClick={() => router.push("/")} className={linkClass("home")}>
                         Home
                     </h3>
-                    <h3 onClick={() => router.push("/pages/explore")} className={linkClass("explore")}>
+                    <h3 onClick={() => router.push("/explore")} className={linkClass("explore")}>
                         Explore
                     </h3>
                 </div>
@@ -104,13 +104,13 @@ export default function Header({isLoggedIn, activePage}: HeaderProps){
                 <div className={`lg:hidden text-[#4c3730] ${isLoggedIn ? 'bg-[#fffcf4]' : 'bg-[#f7edda]'} px-7 py-4 space-y-4`}>
                     {isLoggedIn && (
                         <>
-                        <h3 onClick={() => router.push("/pages/yourCoffee")} className={`${linkClass("your-coffees")}`}>
-                            Your coffees
+                        <h3 onClick={() => router.push("/yourCoffee")} className={`${linkClass("your-coffees")}`}>
+                            My coffees
                         </h3>
-                        <h3 onClick={() => router.push("/pages/newCoffee")} className={linkClass("log-new")}>
+                        <h3 onClick={() => router.push("/newCoffee")} className={linkClass("log-new")}>
                             Log new
                         </h3>
-                        <h3 onClick={() => router.push("/pages/myProfile")} className={linkClass("my-profile")}>
+                        <h3 onClick={() => router.push("/myProfile")} className={linkClass("my-profile")}>
                             My profile
                         </h3>
                         </>

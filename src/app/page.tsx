@@ -39,13 +39,11 @@ export default function HomePage(){
         }
   
         // Fetch a 5 star coffee - exclude any from one of the top coffee shops already shown
-        console.log('topCoffeeShops:', topCoffeeShops);
         const fiveStarResponse = await fetch(`/api/coffees?rating=5&noUser=true&limit=1&excludeShopIds=${topCoffeeShops}`);
         if (!fiveStarResponse.ok) throw new Error("Failed to fetch coffee");
         const fiveStarData = await fiveStarResponse.json();
         setFiveStarCoffee(fiveStarData[0]);
-        // console.log('5 star coffee:', fiveStarData);
-  
+
       } catch (error) {
         console.error("Error loading data:", error);
       } finally {
@@ -177,7 +175,7 @@ export default function HomePage(){
             <Map 
               coffeeShops={coffeeShops} 
               onMarkersReady={setMarkerMap} 
-              highlightedCoffee={fiveStarCoffee}
+              highlightedCoffee={isLoggedIn ? fiveStarCoffee : null }
               isLoggedIn={isLoggedIn}
               className={`w-full rounded-3xl mt-1.5 mb-4 
                 ${isLoggedIn ? 'h-[412px]' : 'h-[510px]'} 

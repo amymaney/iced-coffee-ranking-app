@@ -20,7 +20,8 @@ type CoffeeFormState = {
 
 
 export default function NewIcedCoffee(){
-  const router = useRouter();
+  const [movingNext, setMovingNext] = useState<boolean>(false);
+  const router = useRouter();  
     const { data: session, status } = useSession();
     useEffect(() => {
       if (status === "loading") return; 
@@ -150,8 +151,8 @@ export default function NewIcedCoffee(){
     };
 
     const handleSubmit = async (e: React.FormEvent)=> {
+      setMovingNext(true);
       e.preventDefault();
-      console.log("coffee",coffee);
       let uploadedImageUrl = "";
 
       let imageUploadStatus;
@@ -348,7 +349,7 @@ export default function NewIcedCoffee(){
               <button type="submit" className="bg-[#DAE4F7] text-[#432818] px-4 py-2 font-semibold rounded-xl w-full cursor-pointer 
                 transition-all duration-200 hover:shadow-lg hover:scale-[1.02] border-1 border-[#6F4E37]"
               >
-                submit
+                {movingNext ? "loading..." : "submit"}
               </button>
             </form>
 

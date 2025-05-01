@@ -17,8 +17,8 @@ export default function Explore(){
     const [loading, setLoading] = useState(true);
     const isLoggedIn = !!session;
     const [searchTerm, setSearchTerm] = useState('');
-    const [visibleCount, setVisibleCount] = useState(8);
-    const coffeesPerLoad = 4;
+    const [visibleCount, setVisibleCount] = useState(10);
+    const coffeesPerLoad = 5;
     
     const filteredCoffees = coffees.filter(coffee => coffee.name.toLowerCase().includes(searchTerm.toLowerCase()));
     const visibleCoffees = filteredCoffees.slice(0, visibleCount);
@@ -90,9 +90,9 @@ export default function Explore(){
     return(
         <div>
             <Header isLoggedIn={isLoggedIn} activePage="explore" />
-            <div className="bg-[#f7edda] min-h-screen w-full flex flex-col pt-3">
+            <div className="bg-[#f7edda] min-h-screen w-full flex flex-col sm:pt-3 pt-1">
                 <div className="pb-3 flex flex-row justify-between px-10">
-                    <h1 className="text-[#6F4E37] text-left text-4xl font-roboto-mono mt-2">
+                    <h1 className="hidden sm:block text-[#6F4E37] sm:text-left text-4xl font-roboto-mono mt-2">
                         explore coffees
                     </h1>
                     <div>
@@ -101,15 +101,16 @@ export default function Explore(){
                 </div>
 
                 {/* Search, sort and filter  */}
-                <div className="px-5 pt-2">
-                    <div className="mb-4 w-1/2">
-                        <input 
+                <div className="px-5 pt-0 sm:pt-2">
+                    <div className="mb-2 sm:mb-4 w-full sm:w-1/2">
+                        <input
+                            name="search-box"
                             type="text"
                             value={searchTerm}
                             onChange={(e)=>setSearchTerm(e.target.value)}
                             placeholder="Search"
                             className="w-full p-2 rounded-2xl bg-white border border-transparent focus:outline-none 
-                            focus:ring-1 focus:ring-[#6F4E37] h-10"
+                            focus:ring-1 focus:ring-[#6F4E37] sm:h-10 h-8"
                         />
                     </div>
                     <div className="w-1/4">
@@ -120,17 +121,17 @@ export default function Explore(){
                     </div>
                 </div>
 
-                <div className="w-full px-6 flex flex-row gap-3">
-                    <div className="w-1/2 min-w-[300px] lg:h-900px">
+                <div className="w-full px-6 flex flex-col sm:flex-row gap-3 mb-3">
+                    <div className="w-1/2 min-w-full sm:min-w-[300px] lg:h-900px">
                         <Map 
                             coffeeShops={coffeeShops} 
                             onMarkersReady={setMarkerMap}
                             isLoggedIn={isLoggedIn}
-                            className={`w-full rounded-3xl mt-1.5 mb-2 
-                                h-[650px] `}
+                            className={`w-full rounded-3xl mt-1.5 sm:mb-2 mb-0
+                                sm:h-[650px] h-[275px]`}
                         />
                     </div>
-                    <div className="w-1/2 h-[650px] grid grid-cols-1 lg:grid-cols-2 gap-5 
+                    <div className="w-full sm:w-1/2 h-[650px] grid grid-cols-1 lg:grid-cols-2 gap-5 
                         p-2 overflow-y-auto"
                         onScroll={handleScroll}
                     >
@@ -144,7 +145,7 @@ export default function Explore(){
                             />
                         ))
                     ) : (
-                        <p className="text-center col-span-full">No results found</p> // Optional: message when no results
+                        <p className="text-center col-span-full">No results found</p>
                     )}
                     </div>
                     {/* <div className="w-1/2 space-y-4">

@@ -12,16 +12,18 @@ export interface IcedCoffeeCardProps {
   };
   onHover?: () => void;
   onLeave?: () => void;
+  layout?: "image-side" | "image-below";
 }
 
 export default function IcedCoffeeCard({
-    name, price, rating, description, image, coffeeShop, onHover, onLeave,
+    name, price, rating, description, image, coffeeShop, onHover, onLeave, layout = "image-below"
   }: IcedCoffeeCardProps){
+    const isImageSide = layout === "image-side";
     return(
       <div 
         onMouseEnter={onHover}
         onMouseLeave={onLeave}
-        className={`bg-[#FFFCF4] flex flex-col sm:flex-row justify-between w-full px-7 py-5 shadow-md 
+        className={`bg-[#FFFCF4] flex ${isImageSide ? 'flex-row' : 'flex-col sm:flex-row'} justify-between px-7 py-5 shadow-md 
         rounded-4xl transition-all duration-200 hover:shadow-lg hover:scale-[1.02] cursor-pointer
         border border-transparent hover:border-[#6F4E37] gap-3 ${image ? 'max-h-100' : 'max-h-50'}`}
       >

@@ -31,7 +31,7 @@ type Coffee = {
 
 interface MapProps {
   coffeeShops: CoffeeShop[];
-  highlightedCoffee?: Coffee;
+  highlightedCoffee?: Coffee | null;
   onMarkersReady?: (markerMap: MarkerMap) => void;
 }
 
@@ -119,7 +119,7 @@ const Map = forwardRef(function Map({ coffeeShops, highlightedCoffee, onMarkersR
           content: renderToString(<MapPopupCard shop={shop} />),
         });
 
-        marker.addListener("click", ()=>{
+        marker.addListener("gmp-click", ()=>{
           infoWindow.open(map, marker);
         })
       }
